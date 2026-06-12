@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nikan sin ukeplan</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --dirt:    #8B6340;
+  --dirt-dark: #6B4A2A;
+  --stone:   #7F7F7F;
+  --stone-light: #9F9F9F;
+  --stone-dark: #5A5A5A;
+  --grass:   #5D9B3A;
+  --grass-top: #7BC950;
+  --wood:    #9C7A3C;
+  --wood-dark: #7A5A22;
+  --gold:    #FFD700;
+  --gold-dark: #C8A000;
+  --emerald: #17DD62;
+  --emerald-dark: #0EA048;
+  --red:     #CC3333;
+  --sky:     #6AB0E8;
+  --sky-dark:#3D7DBD;
+  --text-pixel: #FFFFFF;
+  --text-shadow: #3F3F3F;
+  --lava:    #E05A00;
+  --bg: #1A1A2E;
+}
+
+body {
+  font-family: 'Press Start 2P', monospace;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, #16213e 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, #0f3460 0%, transparent 50%);
+  color: var(--text-pixel);
+  min-height: 100vh;
+  padding: 1.5rem 1rem 4rem;
+  image-rendering: pixelated;
+}
+
+/* Pixelated border mixin via box-shadow */
+.pixel-border {
+  border: 4px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    4px 4px 0 #000;
+}
+
+.pixel-border-sm {
+  border: 3px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,0.25),
+    inset -1px -1px 0 rgba(0,0,0,0.4),
+    3px 3px 0 #000;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-block {
+  display: inline-block;
+  background: var(--grass);
+  background-image:
+    linear-gradient(180deg, var(--grass-top) 0%, var(--grass-top) 30%, var(--grass) 30%, var(--grass) 45%, var(--dirt) 45%);
+  padding: 1.2rem 2rem 1rem;
+  border: 4px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.5),
+    5px 5px 0 #000;
+  margin-bottom: 0.8rem;
+}
+
+.header-block h1 {
+  font-size: clamp(0.75rem, 3vw, 1.1rem);
+  color: #fff;
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000;
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+.header-block h1 span {
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #7A4800, -1px -1px 0 #7A4800;
+}
+
+.week-label {
+  font-size: 0.77rem;
+  color: #aaa;
+  text-shadow: 1px 1px 0 #000;
+  letter-spacing: 1px;
+}
+
+.week-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Earnings panel */
+.earnings-bar {
+  background: var(--wood);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 2px,
+    transparent 2px, transparent 18px
+  );
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 4px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    4px 4px 0 #000;
+}
+
+.earnings-title {
+  font-size: 0.77rem;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #7A4800;
+  margin-bottom: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.earnings-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #e8d5a0;
+  text-shadow: 1px 1px 0 #000;
+  padding: 0.3rem 0;
+  letter-spacing: 0.5px;
+}
+
+.earnings-row.total {
+  border-top: 3px solid #000;
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  font-size: 0.94rem;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #7A4800;
+}
+
+/* Days grid */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.day-card {
+  background: var(--stone);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 8px);
+  border: 4px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.2),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    4px 4px 0 #000;
+  overflow: hidden;
+  transition: transform 0.1s;
+}
+
+.day-card.completed {
+  background: #2A5C1A;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.15),
+    inset -2px -2px 0 rgba(0,0,0,0.5),
+    4px 4px 0 #000,
+    0 0 0 2px var(--emerald);
+}
+
+.day-card.locked {
+  opacity: 0.45;
+  filter: grayscale(40%);
+}
+
+.day-card.locked .task-item {
+  pointer-events: none;
+  cursor: default;
+}
+
+.day-header {
+  background: var(--stone-dark);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
+    transparent 1px, transparent 10px
+  );
+  padding: 0.6rem 0.75rem;
+  border-bottom: 3px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day-card.completed .day-header {
+  background: #1A4A0A;
+}
+
+.day-name {
+  font-size: 0.77rem;
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 0.5px;
+}
+
+.day-badge {
+  font-size: 0.65rem;
+  padding: 3px 6px;
+  background: #000;
+  color: #aaa;
+  text-shadow: none;
+  border: 2px solid #555;
+  letter-spacing: 0.5px;
+}
+
+.day-card.completed .day-badge {
+  color: var(--emerald);
+  border-color: var(--emerald-dark);
+}
+
+.locked-label {
+  font-size: 0.65rem;
+  color: #888;
+}
+
+.task-list { padding: 0.4rem 0; }
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.task-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Inventory-slot style checkbox */
+.task-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #1A1A1A;
+  border: 3px solid #000;
+  box-shadow:
+    inset 1px 1px 0 #555,
+    inset -1px -1px 0 #000;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: background 0.1s;
+}
+
+.task-item input[type="checkbox"]:checked {
+  background: var(--emerald-dark);
+}
+
+.task-item input[type="checkbox"]:checked::after {
+  content: '✔';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 15.0px;
+  color: var(--emerald);
+  text-shadow: 1px 1px 0 #000;
+  font-family: monospace;
+}
+
+.task-item label {
+  font-size: 0.65rem;
+  color: #ddd;
+  text-shadow: 1px 1px 0 #000;
+  cursor: pointer;
+  line-height: 1.8;
+  flex: 1;
+  letter-spacing: 0.3px;
+}
+
+.task-item.done label {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.day-footer {
+  padding: 0.4rem 0.75rem 0.6rem;
+  border-top: 2px solid #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: #1A1A1A;
+  border: 2px solid #000;
+  box-shadow: inset 1px 1px 0 #000;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--emerald-dark), var(--emerald));
+  transition: width 0.3s ease;
+  image-rendering: pixelated;
+}
+
+.footer-kr {
+  font-size: 0.65rem;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 #7A4800;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Extras */
+.extras-section {
+  background: var(--dirt);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 6px);
+  border: 4px solid #000;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.15),
+    inset -2px -2px 0 rgba(0,0,0,0.4),
+    4px 4px 0 #000;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.extras-header {
+  background: var(--dirt-dark);
+  padding: 0.6rem 0.75rem;
+  border-bottom: 3px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.extras-title {
+  font-size: 0.77rem;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #7A4800;
+  letter-spacing: 0.5px;
+}
+
+.extras-subtitle {
+  font-size: 0.65rem;
+  color: #c8a86a;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.extras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 0.5rem;
+  gap: 0.5rem;
+}
+
+.extra-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  background: rgba(0,0,0,0.25);
+  border: 2px solid #000;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.extra-item:hover {
+  background: rgba(255,180,0,0.12);
+  border-color: var(--gold-dark);
+}
+
+.extra-item.done {
+  background: rgba(255,180,0,0.18);
+  border-color: var(--gold-dark);
+}
+
+.extra-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #1A1A1A;
+  border: 3px solid #000;
+  box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.extra-item input[type="checkbox"]:checked {
+  background: var(--gold-dark);
+}
+
+.extra-item input[type="checkbox"]:checked::after {
+  content: '✔';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 15.0px;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 #000;
+  font-family: monospace;
+}
+
+.extra-item label {
+  font-size: 0.65rem;
+  color: #ddd;
+  text-shadow: 1px 1px 0 #000;
+  cursor: pointer;
+  flex: 1;
+  line-height: 1.8;
+  letter-spacing: 0.3px;
+}
+
+.extra-item .kr-badge {
+  font-size: 0.65rem;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 #7A4800;
+  white-space: nowrap;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.68rem;
+  padding: 0.6rem 1rem;
+  background: var(--stone-dark);
+  color: #ddd;
+  border: 3px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,0.2),
+    inset -1px -1px 0 rgba(0,0,0,0.4),
+    3px 3px 0 #000;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 #000;
+  letter-spacing: 0.5px;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.btn:hover { background: var(--stone); }
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.4), 1px 1px 0 #000;
+}
+
+.btn-danger {
+  background: var(--red);
+  color: #fff;
+}
+.btn-danger:hover { background: #AA2222; }
+
+.saved-indicator {
+  font-size: 0.65rem;
+  color: var(--emerald);
+  text-shadow: 1px 1px 0 #000;
+  margin-left: auto;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px);
+  background: var(--wood-dark);
+  color: var(--gold);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.77rem;
+  padding: 0.75rem 1.25rem;
+  border: 4px solid #000;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,0.2),
+    inset -1px -1px 0 rgba(0,0,0,0.4),
+    4px 4px 0 #000;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+  text-align: center;
+  text-shadow: 2px 2px 0 #7A4800;
+  letter-spacing: 0.5px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Stars background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body > * { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<header>
+  <div class="header-block">
+    <h1>⛏ <span>NIKAN</span> SIN UKEPLAN ⛏</h1>
+  </div>
+  <div class="week-label" id="week-label">Laster...</div>
+</header>
+
+<div class="week-container">
+  <div class="earnings-bar">
+    <div class="earnings-title">▶ UKENS BELØNNING</div>
+    <div class="earnings-row">
+      <span>Dagoppgaver (20 kr/dag)</span>
+      <span id="earn-daily">0 kr</span>
+    </div>
+    <div class="earnings-row">
+      <span>Ekstraoppgaver (30 kr/stk)</span>
+      <span id="earn-extras">0 kr</span>
+    </div>
+    <div class="earnings-row total">
+      <span>★ TOTALT TJENT</span>
+      <span id="earn-total">0 kr</span>
+    </div>
+  </div>
+
+  <div class="days-grid" id="days-grid"></div>
+
+  <div class="extras-section">
+    <div class="extras-header">
+      <span class="extras-title">★ EKSTRAOPPGAVER</span>
+      <span class="extras-subtitle">30 kr per oppgave</span>
+    </div>
+    <div class="extras-grid" id="extras-grid"></div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-danger" onclick="resetWeek()">☠ Tøm ukeark</button>
+    <span class="saved-indicator" id="saved-indicator"></span>
+  </div>
+</div>
+
+<script>
+const DAYS_CONFIG = [
+  { key: 'mon', name: 'MANDAG', tasks: [
+    'Legge frem klær til neste dag',
+    'Pakke sekken sin',
+    'Pusse tenner',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv',
+    'Re sengen'
+  ]},
+  { key: 'tue', name: 'TIRSDAG', tasks: [
+    'Legge frem klær til neste dag',
+    'Pakke sekken sin',
+    'Pusse tenner',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv',
+    'Re sengen'
+  ]},
+  { key: 'wed', name: 'ONSDAG', tasks: [
+    'Legge frem klær til neste dag',
+    'Pakke sekken sin',
+    'Pusse tenner',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv',
+    'Re sengen'
+  ]},
+  { key: 'thu', name: 'TORSDAG', tasks: [
+    'Legge frem klær til neste dag',
+    'Pakke sekken sin',
+    'Pusse tenner',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv',
+    'Re sengen',
+    'Samtlige lekser ferdig'
+  ]},
+  { key: 'fri', name: 'FREDAG', tasks: [
+    'Legge frem klær til neste dag',
+    'Pakke sekken sin',
+    'Pusse tenner',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv',
+    'Re sengen'
+  ]},
+  { key: 'sat', name: 'LØRDAG', tasks: [
+    'Rydde rommet sitt',
+    'Re sengen',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv'
+  ]},
+  { key: 'sun', name: 'SØNDAG', tasks: [
+    'Re sengen',
+    'Rydde inn i oppvaskmaskin',
+    'Tømme kattedoen',
+    'Skitne klær i skittentøyskurv'
+  ]}
+];
+
+const EXTRAS = [
+  'Støvsuge bilen',
+  'Klippe gresset',
+  'Støvsuge rommet sitt',
+  'Tørke støv på lister',
+  'Henge klær til tørk',
+  'Legge på plass tørre klær'
+];
+
+const DAY_REWARD = 20;
+const EXTRA_REWARD = 30;
+const STORAGE_KEY = 'nikan_tracker_v3';
+let state = {};
+
+function getWeekKey() {
+  const now = new Date();
+  const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+function getWeekLabel() {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - day + 1);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('no-NO', { day: 'numeric', month: 'long' });
+  return `UKE ${getWeekKey().split('W')[1]}  ·  ${fmt(monday)} – ${fmt(sunday)}`;
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.weekKey === getWeekKey()) return parsed;
+    }
+  } catch(e) {}
+  return { weekKey: getWeekKey(), days: {}, extras: {} };
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const ind = document.getElementById('saved-indicator');
+  if (ind) {
+    ind.textContent = '✔ LAGRET';
+    setTimeout(() => { ind.textContent = ''; }, 1500);
+  }
+}
+
+function isDayLocked(dayKey) {
+  const jsDay = new Date().getDay();
+  const todayIndex = jsDay === 0 ? 6 : jsDay - 1;
+  const keyOrder = ['mon','tue','wed','thu','fri','sat','sun'];
+  return keyOrder.indexOf(dayKey) < todayIndex;
+}
+
+function calcEarnings() {
+  let daily = 0;
+  DAYS_CONFIG.forEach(day => {
+    const ds = state.days[day.key] || {};
+    const done = day.tasks.filter((_, i) => ds[i]).length;
+    if (done === day.tasks.length && day.tasks.length > 0) daily += DAY_REWARD;
+  });
+  let extras = 0;
+  EXTRAS.forEach((_, i) => { if (state.extras[i]) extras += EXTRA_REWARD; });
+  return { daily, extras, total: daily + extras };
+}
+
+function updateEarnings() {
+  const { daily, extras, total } = calcEarnings();
+  document.getElementById('earn-daily').textContent = daily + ' kr';
+  document.getElementById('earn-extras').textContent = extras + ' kr';
+  document.getElementById('earn-total').textContent = total + ' kr';
+}
+
+let shownCompleted = {};
+
+function renderDays() {
+  const grid = document.getElementById('days-grid');
+  grid.innerHTML = '';
+
+  DAYS_CONFIG.forEach(day => {
+    const dayState = state.days[day.key] || {};
+    const totalTasks = day.tasks.length;
+    const doneTasks = day.tasks.filter((_, i) => dayState[i]).length;
+    const allDone = doneTasks === totalTasks;
+    const locked = isDayLocked(day.key);
+
+    const card = document.createElement('div');
+    card.className = 'day-card' + (allDone ? ' completed' : '') + (locked ? ' locked' : '');
+
+    const header = document.createElement('div');
+    header.className = 'day-header';
+    let badgeText = locked ? '<span class="locked-label">🔒 LÅST</span>' : (allDone ? '★ FULLFØRT' : `${doneTasks}/${totalTasks}`);
+    header.innerHTML = `<span class="day-name">${day.name}</span><span class="day-badge">${badgeText}</span>`;
+    card.appendChild(header);
+
+    const list = document.createElement('div');
+    list.className = 'task-list';
+
+    day.tasks.forEach((task, i) => {
+      const checked = !!dayState[i];
+      const item = document.createElement('div');
+      item.className = 'task-item' + (checked ? ' done' : '');
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.id = `${day.key}-${i}`;
+      cb.checked = checked;
+
+      const lbl = document.createElement('label');
+      lbl.htmlFor = cb.id;
+      lbl.textContent = task;
+
+      cb.addEventListener('change', () => {
+        if (!state.days[day.key]) state.days[day.key] = {};
+        state.days[day.key][i] = cb.checked;
+        saveState();
+        updateEarnings();
+        const newDone = day.tasks.filter((_, j) => state.days[day.key][j]).length;
+        if (newDone === totalTasks && !shownCompleted[day.key]) {
+          shownCompleted[day.key] = true;
+          showToast(`★ ${day.name} FULLFØRT! +${DAY_REWARD} kr ★`, 3000);
+        } else if (newDone < totalTasks) {
+          shownCompleted[day.key] = false;
+        }
+        renderDays();
+      });
+
+      item.appendChild(cb);
+      item.appendChild(lbl);
+      list.appendChild(item);
+    });
+
+    card.appendChild(list);
+
+    const pct = totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0;
+    const footer = document.createElement('div');
+    footer.className = 'day-footer';
+    footer.innerHTML = `
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <span class="footer-kr">${allDone ? DAY_REWARD + ' kr' : ''}</span>
+    `;
+    card.appendChild(footer);
+    grid.appendChild(card);
+  });
+}
+
+function renderExtras() {
+  const grid = document.getElementById('extras-grid');
+  grid.innerHTML = '';
+  EXTRAS.forEach((task, i) => {
+    const checked = !!state.extras[i];
+    const item = document.createElement('div');
+    item.className = 'extra-item' + (checked ? ' done' : '');
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = `extra-${i}`;
+    cb.checked = checked;
+
+    const lbl = document.createElement('label');
+    lbl.htmlFor = cb.id;
+    lbl.textContent = task;
+
+    const badge = document.createElement('span');
+    badge.className = 'kr-badge';
+    badge.textContent = '30 kr';
+
+    cb.addEventListener('change', () => {
+      state.extras[i] = cb.checked;
+      saveState();
+      updateEarnings();
+      item.className = 'extra-item' + (cb.checked ? ' done' : '');
+    });
+
+    item.appendChild(cb);
+    item.appendChild(lbl);
+    item.appendChild(badge);
+    grid.appendChild(item);
+  });
+}
+
+function showToast(msg, duration) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show';
+  setTimeout(() => { t.className = 'toast'; }, duration || 2000);
+}
+
+function resetWeek() {
+  if (!confirm('Tøm ukearket? All avkryssing slettes.')) return;
+  state = { weekKey: getWeekKey(), days: {}, extras: {} };
+  shownCompleted = {};
+  saveState();
+  renderDays();
+  renderExtras();
+  updateEarnings();
+  showToast('☠ UKEARK TØMT', 2000);
+}
+
+function init() {
+  document.getElementById('week-label').textContent = getWeekLabel();
+  state = loadState();
+  renderDays();
+  renderExtras();
+  updateEarnings();
+}
+
+init();
+</script>
+</body>
+</html>
