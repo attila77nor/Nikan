@@ -43,26 +43,7 @@ body {
   image-rendering: pixelated;
 }
 
-.pixel-border {
-  border: 4px solid #000;
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.3),
-    inset -2px -2px 0 rgba(0,0,0,0.4),
-    4px 4px 0 #000;
-}
-
-.pixel-border-sm {
-  border: 3px solid #000;
-  box-shadow:
-    inset 1px 1px 0 rgba(255,255,255,0.25),
-    inset -1px -1px 0 rgba(0,0,0,0.4),
-    3px 3px 0 #000;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+header { text-align: center; margin-bottom: 2rem; }
 
 .header-block {
   display: inline-block;
@@ -98,18 +79,11 @@ header {
   letter-spacing: 1px;
 }
 
-.week-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
+.week-container { max-width: 900px; margin: 0 auto; }
 
 .earnings-bar {
   background: var(--wood);
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 2px,
-    transparent 2px, transparent 18px
-  );
+  background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 2px, transparent 2px, transparent 18px);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
   border: 4px solid #000;
@@ -164,7 +138,6 @@ header {
     inset -2px -2px 0 rgba(0,0,0,0.4),
     4px 4px 0 #000;
   overflow: hidden;
-  transition: transform 0.1s;
 }
 
 .day-card.completed {
@@ -181,11 +154,7 @@ header {
 
 .day-header {
   background: var(--stone-dark);
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
-    transparent 1px, transparent 10px
-  );
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 10px);
   padding: 0.6rem 0.75rem;
   border-bottom: 3px solid #000;
   display: flex;
@@ -193,9 +162,7 @@ header {
   justify-content: space-between;
 }
 
-.day-card.completed .day-header {
-  background: #1A4A0A;
-}
+.day-card.completed .day-header { background: #1A4A0A; }
 
 .day-name {
   font-size: 0.77rem;
@@ -209,15 +176,11 @@ header {
   padding: 3px 6px;
   background: #000;
   color: #aaa;
-  text-shadow: none;
   border: 2px solid #555;
   letter-spacing: 0.5px;
 }
 
-.day-card.completed .day-badge {
-  color: var(--emerald);
-  border-color: var(--emerald-dark);
-}
+.day-card.completed .day-badge { color: var(--emerald); border-color: var(--emerald-dark); }
 
 .task-list { padding: 0.4rem 0; }
 
@@ -230,9 +193,7 @@ header {
   transition: background 0.1s;
 }
 
-.task-item:hover {
-  background: rgba(255,255,255,0.08);
-}
+.task-item:hover { background: rgba(255,255,255,0.08); }
 
 .task-item input[type="checkbox"] {
   appearance: none;
@@ -241,18 +202,13 @@ header {
   height: 20px;
   background: #1A1A1A;
   border: 3px solid #000;
-  box-shadow:
-    inset 1px 1px 0 #555,
-    inset -1px -1px 0 #000;
+  box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
   cursor: pointer;
   flex-shrink: 0;
   position: relative;
-  transition: background 0.1s;
 }
 
-.task-item input[type="checkbox"]:checked {
-  background: var(--emerald-dark);
-}
+.task-item input[type="checkbox"]:checked { background: var(--emerald-dark); }
 
 .task-item input[type="checkbox"]:checked::after {
   content: '✔';
@@ -275,10 +231,23 @@ header {
   letter-spacing: 0.3px;
 }
 
-.task-item.done label {
-  text-decoration: line-through;
-  color: #777;
+.task-item.done label { text-decoration: line-through; color: #777; }
+
+.task-item .del-btn {
+  display: none;
+  background: var(--red);
+  color: #fff;
+  border: 2px solid #000;
+  width: 20px;
+  height: 20px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
 }
+
+.edit-mode .task-item .del-btn { display: block; }
+.edit-mode .task-item input[type="checkbox"] { opacity: 0.3; pointer-events: none; }
 
 .day-footer {
   padding: 0.4rem 0.75rem 0.6rem;
@@ -311,6 +280,35 @@ header {
   text-align: right;
 }
 
+.add-task-row {
+  display: none;
+  padding: 0.5rem 0.75rem;
+  border-top: 2px dashed #000;
+  gap: 0.4rem;
+}
+.edit-mode .add-task-row { display: flex; }
+
+.add-task-row input {
+  flex: 1;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  padding: 0.4rem;
+  background: #1A1A1A;
+  color: #fff;
+  border: 2px solid #000;
+}
+
+.add-task-row button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--emerald-dark);
+  color: #fff;
+  border: 2px solid #000;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .extras-section {
   background: var(--dirt);
   background-image:
@@ -332,6 +330,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .extras-title {
@@ -363,18 +363,10 @@ header {
   border: 2px solid #000;
   box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
   cursor: pointer;
-  transition: background 0.1s;
 }
 
-.extra-item:hover {
-  background: rgba(255,180,0,0.12);
-  border-color: var(--gold-dark);
-}
-
-.extra-item.done {
-  background: rgba(255,180,0,0.18);
-  border-color: var(--gold-dark);
-}
+.extra-item:hover { background: rgba(255,180,0,0.12); border-color: var(--gold-dark); }
+.extra-item.done { background: rgba(255,180,0,0.18); border-color: var(--gold-dark); }
 
 .extra-item input[type="checkbox"] {
   appearance: none;
@@ -389,9 +381,7 @@ header {
   position: relative;
 }
 
-.extra-item input[type="checkbox"]:checked {
-  background: var(--gold-dark);
-}
+.extra-item input[type="checkbox"]:checked { background: var(--gold-dark); }
 
 .extra-item input[type="checkbox"]:checked::after {
   content: '✔';
@@ -421,6 +411,49 @@ header {
   white-space: nowrap;
 }
 
+.extra-item .del-btn {
+  display: none;
+  background: var(--red);
+  color: #fff;
+  border: 2px solid #000;
+  width: 20px;
+  height: 20px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.edit-mode .extra-item .del-btn { display: block; }
+
+.add-extra-row {
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  gap: 0.4rem;
+  border-top: 2px dashed #000;
+  flex-wrap: wrap;
+}
+
+.add-extra-row input[type="text"] {
+  flex: 1;
+  min-width: 140px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  padding: 0.4rem;
+  background: #1A1A1A;
+  color: #fff;
+  border: 2px solid #000;
+}
+
+.add-extra-row select, .add-extra-row button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--gold-dark);
+  color: #1A1A1A;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
 .bottom-bar {
   max-width: 900px;
   margin: 0 auto;
@@ -448,16 +481,14 @@ header {
 }
 
 .btn:hover { background: var(--stone); }
-.btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.4), 1px 1px 0 #000;
-}
+.btn:active { transform: translate(2px, 2px); box-shadow: inset 1px 1px 0 rgba(0,0,0,0.4), 1px 1px 0 #000; }
 
-.btn-danger {
-  background: var(--red);
-  color: #fff;
-}
+.btn-danger { background: var(--red); color: #fff; }
 .btn-danger:hover { background: #AA2222; }
+
+.btn-edit { background: var(--gold-dark); color: #1A1A1A; }
+.btn-edit:hover { background: #DDB800; }
+.btn-edit.active { background: var(--emerald-dark); color: #fff; }
 
 .saved-indicator {
   font-size: 0.65rem;
@@ -491,10 +522,21 @@ header {
   letter-spacing: 0.5px;
 }
 
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.edit-banner {
+  display: none;
+  max-width: 900px;
+  margin: 0 auto 1rem;
+  background: var(--gold-dark);
+  color: #1A1A1A;
+  font-size: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border: 3px solid #000;
+  text-align: center;
+  letter-spacing: 0.5px;
 }
+body.edit-mode .edit-banner { display: block; }
 
 body::before {
   content: '';
@@ -527,6 +569,8 @@ body > * { position: relative; z-index: 1; }
   <div class="week-label" id="week-label">Laster...</div>
 </header>
 
+<div class="edit-banner">✎ REDIGERINGSMODUS — endringer her er PERMANENTE og påvirker alle uker</div>
+
 <div class="week-container">
   <div class="earnings-bar">
     <div class="earnings-title">▶ UKENS BELØNNING</div>
@@ -552,84 +596,88 @@ body > * { position: relative; z-index: 1; }
       <span class="extras-subtitle">30 kr per oppgave</span>
     </div>
     <div class="extras-grid" id="extras-grid"></div>
+    <div class="add-extra-row">
+      <input type="text" id="new-extra-input" placeholder="Ny ekstraoppgave...">
+      <select id="new-extra-type">
+        <option value="temp">Midlertidig (forsvinner ved tøm)</option>
+        <option value="permanent">Permanent</option>
+      </select>
+      <button onclick="addExtraTask()">+ Legg til</button>
+    </div>
   </div>
 
   <div class="bottom-bar">
+    <button class="btn btn-edit" id="edit-toggle-btn" onclick="toggleEditMode()">✎ Rediger maler</button>
     <button class="btn btn-danger" onclick="resetWeek()">☠ Tøm ukeark</button>
     <span class="saved-indicator" id="saved-indicator"></span>
   </div>
 </div>
 
 <script>
-const DAYS_CONFIG = [
+const DEFAULT_DAYS_CONFIG = [
   { key: 'mon', name: 'MANDAG', tasks: [
-    'Legge frem klær til neste dag',
-    'Pakke sekken sin',
-    'Pusse tenner',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv',
-    'Re sengen'
+    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
+    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
   ]},
   { key: 'tue', name: 'TIRSDAG', tasks: [
-    'Legge frem klær til neste dag',
-    'Pakke sekken sin',
-    'Pusse tenner',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv',
-    'Re sengen'
+    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
+    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
   ]},
   { key: 'wed', name: 'ONSDAG', tasks: [
-    'Legge frem klær til neste dag',
-    'Pakke sekken sin',
-    'Pusse tenner',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv',
-    'Re sengen'
+    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
+    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
   ]},
   { key: 'thu', name: 'TORSDAG', tasks: [
-    'Legge frem klær til neste dag',
-    'Pakke sekken sin',
-    'Pusse tenner',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv',
-    'Re sengen',
+    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
+    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen',
     'Samtlige lekser ferdig'
   ]},
   { key: 'fri', name: 'FREDAG', tasks: [
-    'Pakke sekken sin',
-    'Pusse tenner',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv',
-    'Re sengen'
+    'Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin',
+    'Skitne klær i skittentøyskurv','Re sengen'
   ]},
   { key: 'sat', name: 'LØRDAG', tasks: [
-    'Rydde rommet sitt',
-    'Re sengen',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv'
+    'Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv'
   ]},
   { key: 'sun', name: 'SØNDAG', tasks: [
-    'Legge frem klær til neste dag',
-    'Re sengen',
-    'Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv'
+    'Legge frem klær til neste dag','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv'
   ]}
 ];
 
-const EXTRAS = [
-  'Støvsuge bilen',
-  'Klippe gresset hagen',
-  'Klippe gresset foran',
-  'Støvsuge rommet sitt',
-  'Tørke støv på lister',
-  'Henge klær til tørk',
-  'Legge på plass tørre klær'
+const DEFAULT_EXTRAS = [
+  'Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran',
+  'Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'
 ];
 
 const DAY_REWARD = 20;
 const EXTRA_REWARD = 30;
-const STORAGE_KEY = 'nikan_tracker_v4';
+const STATE_KEY = 'nikan_tracker_v5';
+const TEMPLATE_KEY = 'nikan_templates_v1';
+
+let DAYS_CONFIG = [];
+let PERMANENT_EXTRAS = [];
 let state = {};
+let editMode = false;
+let shownCompleted = {};
+
+function loadTemplates() {
+  try {
+    const raw = localStorage.getItem(TEMPLATE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      DAYS_CONFIG = parsed.days;
+      PERMANENT_EXTRAS = parsed.extras;
+      return;
+    }
+  } catch(e) {}
+  DAYS_CONFIG = JSON.parse(JSON.stringify(DEFAULT_DAYS_CONFIG));
+  PERMANENT_EXTRAS = [...DEFAULT_EXTRAS];
+  saveTemplates();
+}
+
+function saveTemplates() {
+  localStorage.setItem(TEMPLATE_KEY, JSON.stringify({ days: DAYS_CONFIG, extras: PERMANENT_EXTRAS }));
+}
 
 function getWeekKey() {
   const now = new Date();
@@ -652,19 +700,26 @@ function getWeekLabel() {
   return `UKE ${getWeekKey().split('W')[1]}  ·  ${fmt(monday)} – ${fmt(sunday)}`;
 }
 
+// state.days[dayKey] = { taskText: true/false, ... }  (keyed by task text, not index, so template edits don't break checks)
+// state.extras = { taskText: true/false } for permanent extras, keyed by text
+// state.tempExtras = [{ text, done }] for temporary one-off extras
+
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STATE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (parsed.weekKey === getWeekKey()) return parsed;
+      if (parsed.weekKey === getWeekKey()) {
+        if (!parsed.tempExtras) parsed.tempExtras = [];
+        return parsed;
+      }
     }
   } catch(e) {}
-  return { weekKey: getWeekKey(), days: {}, extras: {} };
+  return { weekKey: getWeekKey(), days: {}, extras: {}, tempExtras: [] };
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(STATE_KEY, JSON.stringify(state));
   const ind = document.getElementById('saved-indicator');
   if (ind) {
     ind.textContent = '✔ LAGRET';
@@ -676,11 +731,12 @@ function calcEarnings() {
   let daily = 0;
   DAYS_CONFIG.forEach(day => {
     const ds = state.days[day.key] || {};
-    const done = day.tasks.filter((_, i) => ds[i]).length;
+    const done = day.tasks.filter(t => ds[t]).length;
     if (done === day.tasks.length && day.tasks.length > 0) daily += DAY_REWARD;
   });
   let extras = 0;
-  EXTRAS.forEach((_, i) => { if (state.extras[i]) extras += EXTRA_REWARD; });
+  PERMANENT_EXTRAS.forEach(t => { if (state.extras[t]) extras += EXTRA_REWARD; });
+  (state.tempExtras || []).forEach(item => { if (item.done) extras += EXTRA_REWARD; });
   return { daily, extras, total: daily + extras };
 }
 
@@ -691,7 +747,15 @@ function updateEarnings() {
   document.getElementById('earn-total').textContent = total + ' kr';
 }
 
-let shownCompleted = {};
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('edit-toggle-btn');
+  btn.textContent = editMode ? '✔ Ferdig redigert' : '✎ Rediger maler';
+  btn.classList.toggle('active', editMode);
+  renderDays();
+  renderExtras();
+}
 
 function renderDays() {
   const grid = document.getElementById('days-grid');
@@ -700,8 +764,8 @@ function renderDays() {
   DAYS_CONFIG.forEach(day => {
     const dayState = state.days[day.key] || {};
     const totalTasks = day.tasks.length;
-    const doneTasks = day.tasks.filter((_, i) => dayState[i]).length;
-    const allDone = doneTasks === totalTasks;
+    const doneTasks = day.tasks.filter(t => dayState[t]).length;
+    const allDone = doneTasks === totalTasks && totalTasks > 0;
 
     const card = document.createElement('div');
     card.className = 'day-card' + (allDone ? ' completed' : '');
@@ -715,26 +779,27 @@ function renderDays() {
     const list = document.createElement('div');
     list.className = 'task-list';
 
-    day.tasks.forEach((task, i) => {
-      const checked = !!dayState[i];
+    day.tasks.forEach((task) => {
+      const checked = !!dayState[task];
       const item = document.createElement('div');
       item.className = 'task-item' + (checked ? ' done' : '');
 
       const cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.id = `${day.key}-${i}`;
+      const cbId = `${day.key}-${task}`.replace(/\s+/g, '_');
+      cb.id = cbId;
       cb.checked = checked;
 
       const lbl = document.createElement('label');
-      lbl.htmlFor = cb.id;
+      lbl.htmlFor = cbId;
       lbl.textContent = task;
 
       cb.addEventListener('change', () => {
         if (!state.days[day.key]) state.days[day.key] = {};
-        state.days[day.key][i] = cb.checked;
+        state.days[day.key][task] = cb.checked;
         saveState();
         updateEarnings();
-        const newDone = day.tasks.filter((_, j) => state.days[day.key][j]).length;
+        const newDone = day.tasks.filter(t => state.days[day.key][t]).length;
         if (newDone === totalTasks && !shownCompleted[day.key]) {
           shownCompleted[day.key] = true;
           showToast(`★ ${day.name} FULLFØRT! +${DAY_REWARD} kr ★`, 3000);
@@ -744,8 +809,22 @@ function renderDays() {
         renderDays();
       });
 
+      const delBtn = document.createElement('button');
+      delBtn.className = 'del-btn';
+      delBtn.textContent = '✕';
+      delBtn.title = 'Fjern oppgave permanent';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!confirm(`Fjerne "${task}" fra ${day.name} permanent? Dette gjelder for alle fremtidige uker.`)) return;
+        day.tasks = day.tasks.filter(t => t !== task);
+        saveTemplates();
+        renderDays();
+        updateEarnings();
+      });
+
       item.appendChild(cb);
       item.appendChild(lbl);
+      item.appendChild(delBtn);
       list.appendChild(item);
     });
 
@@ -759,6 +838,30 @@ function renderDays() {
       <span class="footer-kr">${allDone ? DAY_REWARD + ' kr' : ''}</span>
     `;
     card.appendChild(footer);
+
+    if (editMode) {
+      const addRow = document.createElement('div');
+      addRow.className = 'add-task-row';
+      addRow.innerHTML = `
+        <input type="text" placeholder="Ny fast oppgave...">
+        <button>+ Legg til</button>
+      `;
+      const input = addRow.querySelector('input');
+      const btn = addRow.querySelector('button');
+      const submit = () => {
+        const val = input.value.trim();
+        if (!val) return;
+        if (day.tasks.includes(val)) { input.value = ''; return; }
+        day.tasks.push(val);
+        saveTemplates();
+        renderDays();
+        updateEarnings();
+      };
+      btn.addEventListener('click', submit);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+      card.appendChild(addRow);
+    }
+
     grid.appendChild(card);
   });
 }
@@ -766,18 +869,20 @@ function renderDays() {
 function renderExtras() {
   const grid = document.getElementById('extras-grid');
   grid.innerHTML = '';
-  EXTRAS.forEach((task, i) => {
-    const checked = !!state.extras[i];
+
+  PERMANENT_EXTRAS.forEach((task) => {
+    const checked = !!state.extras[task];
     const item = document.createElement('div');
     item.className = 'extra-item' + (checked ? ' done' : '');
 
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.id = `extra-${i}`;
+    const cbId = `extra-${task}`.replace(/\s+/g, '_');
+    cb.id = cbId;
     cb.checked = checked;
 
     const lbl = document.createElement('label');
-    lbl.htmlFor = cb.id;
+    lbl.htmlFor = cbId;
     lbl.textContent = task;
 
     const badge = document.createElement('span');
@@ -785,18 +890,102 @@ function renderExtras() {
     badge.textContent = '30 kr';
 
     cb.addEventListener('change', () => {
-      state.extras[i] = cb.checked;
+      state.extras[task] = cb.checked;
       saveState();
       updateEarnings();
       item.className = 'extra-item' + (cb.checked ? ' done' : '');
     });
 
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.textContent = '✕';
+    delBtn.title = 'Fjern permanent';
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!confirm(`Fjerne "${task}" fra ekstraoppgaver permanent?`)) return;
+      PERMANENT_EXTRAS = PERMANENT_EXTRAS.filter(t => t !== task);
+      saveTemplates();
+      renderExtras();
+      updateEarnings();
+    });
+
     item.appendChild(cb);
     item.appendChild(lbl);
     item.appendChild(badge);
+    item.appendChild(delBtn);
+    grid.appendChild(item);
+  });
+
+  (state.tempExtras || []).forEach((te, idx) => {
+    const item = document.createElement('div');
+    item.className = 'extra-item' + (te.done ? ' done' : '');
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    const cbId = `tempextra-${idx}`;
+    cb.id = cbId;
+    cb.checked = te.done;
+
+    const lbl = document.createElement('label');
+    lbl.htmlFor = cbId;
+    lbl.textContent = te.text + ' (engang)';
+
+    const badge = document.createElement('span');
+    badge.className = 'kr-badge';
+    badge.textContent = '30 kr';
+
+    cb.addEventListener('change', () => {
+      state.tempExtras[idx].done = cb.checked;
+      saveState();
+      updateEarnings();
+      item.className = 'extra-item' + (cb.checked ? ' done' : '');
+    });
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.style.display = 'block';
+    delBtn.textContent = '✕';
+    delBtn.title = 'Fjern';
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.tempExtras.splice(idx, 1);
+      saveState();
+      renderExtras();
+      updateEarnings();
+    });
+
+    item.appendChild(cb);
+    item.appendChild(lbl);
+    item.appendChild(badge);
+    item.appendChild(delBtn);
     grid.appendChild(item);
   });
 }
+
+function addExtraTask() {
+  const input = document.getElementById('new-extra-input');
+  const type = document.getElementById('new-extra-type').value;
+  const val = input.value.trim();
+  if (!val) return;
+
+  if (type === 'permanent') {
+    if (!PERMANENT_EXTRAS.includes(val)) {
+      PERMANENT_EXTRAS.push(val);
+      saveTemplates();
+    }
+  } else {
+    if (!state.tempExtras) state.tempExtras = [];
+    state.tempExtras.push({ text: val, done: false });
+    saveState();
+  }
+  input.value = '';
+  renderExtras();
+  updateEarnings();
+}
+
+document.getElementById('new-extra-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addExtraTask();
+});
 
 function showToast(msg, duration) {
   const t = document.getElementById('toast');
@@ -806,8 +995,8 @@ function showToast(msg, duration) {
 }
 
 function resetWeek() {
-  if (!confirm('Tøm ukearket? All avkryssing slettes.')) return;
-  state = { weekKey: getWeekKey(), days: {}, extras: {} };
+  if (!confirm('Tøm ukearket? All avkryssing og midlertidige ekstraoppgaver slettes. Faste oppgaver/maler beholdes.')) return;
+  state = { weekKey: getWeekKey(), days: {}, extras: {}, tempExtras: [] };
   shownCompleted = {};
   saveState();
   renderDays();
@@ -818,6 +1007,7 @@ function resetWeek() {
 
 function init() {
   document.getElementById('week-label').textContent = getWeekLabel();
+  loadTemplates();
   state = loadState();
   renderDays();
   renderExtras();
