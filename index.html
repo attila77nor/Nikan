@@ -12,7 +12,6 @@
   --dirt:    #8B6340;
   --dirt-dark: #6B4A2A;
   --stone:   #7F7F7F;
-  --stone-light: #9F9F9F;
   --stone-dark: #5A5A5A;
   --grass:   #5D9B3A;
   --grass-top: #7BC950;
@@ -23,11 +22,6 @@
   --emerald: #17DD62;
   --emerald-dark: #0EA048;
   --red:     #CC3333;
-  --sky:     #6AB0E8;
-  --sky-dark:#3D7DBD;
-  --text-pixel: #FFFFFF;
-  --text-shadow: #3F3F3F;
-  --lava:    #E05A00;
   --bg: #1A1A2E;
 }
 
@@ -37,10 +31,9 @@ body {
   background-image:
     radial-gradient(ellipse at 20% 50%, #16213e 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, #0f3460 0%, transparent 50%);
-  color: var(--text-pixel);
+  color: #fff;
   min-height: 100vh;
   padding: 1.5rem 1rem 4rem;
-  image-rendering: pixelated;
 }
 
 header { text-align: center; margin-bottom: 2rem; }
@@ -48,14 +41,10 @@ header { text-align: center; margin-bottom: 2rem; }
 .header-block {
   display: inline-block;
   background: var(--grass);
-  background-image:
-    linear-gradient(180deg, var(--grass-top) 0%, var(--grass-top) 30%, var(--grass) 30%, var(--grass) 45%, var(--dirt) 45%);
+  background-image: linear-gradient(180deg, var(--grass-top) 0%, var(--grass-top) 30%, var(--grass) 30%, var(--grass) 45%, var(--dirt) 45%);
   padding: 1.2rem 2rem 1rem;
   border: 4px solid #000;
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.3),
-    inset -2px -2px 0 rgba(0,0,0,0.5),
-    5px 5px 0 #000;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.3), inset -2px -2px 0 rgba(0,0,0,0.5), 5px 5px 0 #000;
   margin-bottom: 0.8rem;
 }
 
@@ -67,17 +56,19 @@ header { text-align: center; margin-bottom: 2rem; }
   line-height: 1.6;
 }
 
-.header-block h1 span {
-  color: var(--gold);
-  text-shadow: 3px 3px 0 #7A4800, -1px -1px 0 #7A4800;
-}
+.header-block h1 span { color: var(--gold); text-shadow: 3px 3px 0 #7A4800, -1px -1px 0 #7A4800; }
 
-.week-label {
-  font-size: 0.77rem;
+.week-label { font-size: 0.77rem; color: #aaa; text-shadow: 1px 1px 0 #000; letter-spacing: 1px; }
+
+.sync-status {
+  font-size: 0.45rem;
+  margin-top: 0.4rem;
   color: #aaa;
   text-shadow: 1px 1px 0 #000;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
+.sync-status.ok { color: var(--emerald); }
+.sync-status.err { color: var(--red); }
 
 .week-container { max-width: 900px; margin: 0 auto; }
 
@@ -87,45 +78,16 @@ header { text-align: center; margin-bottom: 2rem; }
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
   border: 4px solid #000;
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.2),
-    inset -2px -2px 0 rgba(0,0,0,0.4),
-    4px 4px 0 #000;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.2), inset -2px -2px 0 rgba(0,0,0,0.4), 4px 4px 0 #000;
 }
 
-.earnings-title {
-  font-size: 0.77rem;
-  color: var(--gold);
-  text-shadow: 2px 2px 0 #7A4800;
-  margin-bottom: 0.75rem;
-  letter-spacing: 1px;
-}
+.earnings-title { font-size: 0.77rem; color: var(--gold); text-shadow: 2px 2px 0 #7A4800; margin-bottom: 0.75rem; letter-spacing: 1px; }
 
-.earnings-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.68rem;
-  color: #e8d5a0;
-  text-shadow: 1px 1px 0 #000;
-  padding: 0.3rem 0;
-  letter-spacing: 0.5px;
-}
+.earnings-row { display: flex; justify-content: space-between; font-size: 0.68rem; color: #e8d5a0; text-shadow: 1px 1px 0 #000; padding: 0.3rem 0; letter-spacing: 0.5px; }
 
-.earnings-row.total {
-  border-top: 3px solid #000;
-  margin-top: 0.4rem;
-  padding-top: 0.6rem;
-  font-size: 0.94rem;
-  color: var(--gold);
-  text-shadow: 2px 2px 0 #7A4800;
-}
+.earnings-row.total { border-top: 3px solid #000; margin-top: 0.4rem; padding-top: 0.6rem; font-size: 0.94rem; color: var(--gold); text-shadow: 2px 2px 0 #7A4800; }
 
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
+.days-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 
 .day-card {
   background: var(--stone);
@@ -133,10 +95,7 @@ header { text-align: center; margin-bottom: 2rem; }
     repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 8px),
     repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 8px);
   border: 4px solid #000;
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.2),
-    inset -2px -2px 0 rgba(0,0,0,0.4),
-    4px 4px 0 #000;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.2), inset -2px -2px 0 rgba(0,0,0,0.4), 4px 4px 0 #000;
   overflow: hidden;
 }
 
@@ -145,11 +104,7 @@ header { text-align: center; margin-bottom: 2rem; }
   background-image:
     repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px),
     repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px);
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.15),
-    inset -2px -2px 0 rgba(0,0,0,0.5),
-    4px 4px 0 #000,
-    0 0 0 2px var(--emerald);
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.15), inset -2px -2px 0 rgba(0,0,0,0.5), 4px 4px 0 #000, 0 0 0 2px var(--emerald);
 }
 
 .day-header {
@@ -164,150 +119,60 @@ header { text-align: center; margin-bottom: 2rem; }
 
 .day-card.completed .day-header { background: #1A4A0A; }
 
-.day-name {
-  font-size: 0.77rem;
-  color: #fff;
-  text-shadow: 2px 2px 0 #000;
-  letter-spacing: 0.5px;
-}
+.day-name { font-size: 0.77rem; color: #fff; text-shadow: 2px 2px 0 #000; letter-spacing: 0.5px; }
 
-.day-badge {
-  font-size: 0.65rem;
-  padding: 3px 6px;
-  background: #000;
-  color: #aaa;
-  border: 2px solid #555;
-  letter-spacing: 0.5px;
-}
+.day-badge { font-size: 0.65rem; padding: 3px 6px; background: #000; color: #aaa; border: 2px solid #555; letter-spacing: 0.5px; }
 
 .day-card.completed .day-badge { color: var(--emerald); border-color: var(--emerald-dark); }
 
 .task-list { padding: 0.4rem 0; }
 
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
-  transition: background 0.1s;
-}
+.task-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; cursor: pointer; transition: background 0.1s; }
 
 .task-item:hover { background: rgba(255,255,255,0.08); }
 
 .task-item input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px;
   background: #1A1A1A;
   border: 3px solid #000;
   box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
-  cursor: pointer;
-  flex-shrink: 0;
-  position: relative;
+  cursor: pointer; flex-shrink: 0; position: relative;
 }
 
 .task-item input[type="checkbox"]:checked { background: var(--emerald-dark); }
 
 .task-item input[type="checkbox"]:checked::after {
-  content: '✔';
-  position: absolute;
-  top: -2px;
-  left: 1px;
-  font-size: 15px;
-  color: var(--emerald);
-  text-shadow: 1px 1px 0 #000;
-  font-family: monospace;
+  content: '✔'; position: absolute; top: -2px; left: 1px;
+  font-size: 15px; color: var(--emerald); text-shadow: 1px 1px 0 #000; font-family: monospace;
 }
 
-.task-item label {
-  font-size: 0.65rem;
-  color: #ddd;
-  text-shadow: 1px 1px 0 #000;
-  cursor: pointer;
-  line-height: 1.8;
-  flex: 1;
-  letter-spacing: 0.3px;
-}
+.task-item label { font-size: 0.65rem; color: #ddd; text-shadow: 1px 1px 0 #000; cursor: pointer; line-height: 1.8; flex: 1; letter-spacing: 0.3px; }
 
 .task-item.done label { text-decoration: line-through; color: #777; }
 
 .task-item .del-btn {
-  display: none;
-  background: var(--red);
-  color: #fff;
-  border: 2px solid #000;
-  width: 20px;
-  height: 20px;
-  font-size: 0.6rem;
-  cursor: pointer;
-  flex-shrink: 0;
-  line-height: 1;
+  display: none; background: var(--red); color: #fff;
+  border: 2px solid #000; width: 20px; height: 20px;
+  font-size: 0.6rem; cursor: pointer; flex-shrink: 0; line-height: 1;
 }
 
 .edit-mode .task-item .del-btn { display: block; }
 .edit-mode .task-item input[type="checkbox"] { opacity: 0.3; pointer-events: none; }
 
-.day-footer {
-  padding: 0.4rem 0.75rem 0.6rem;
-  border-top: 2px solid #000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.day-footer { padding: 0.4rem 0.75rem 0.6rem; border-top: 2px solid #000; display: flex; align-items: center; gap: 8px; }
 
-.progress-bar-wrap {
-  flex: 1;
-  height: 6px;
-  background: #1A1A1A;
-  border: 2px solid #000;
-  box-shadow: inset 1px 1px 0 #000;
-  overflow: hidden;
-}
+.progress-bar-wrap { flex: 1; height: 6px; background: #1A1A1A; border: 2px solid #000; overflow: hidden; }
 
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--emerald-dark), var(--emerald));
-  transition: width 0.3s ease;
-}
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--emerald-dark), var(--emerald)); transition: width 0.3s ease; }
 
-.footer-kr {
-  font-size: 0.65rem;
-  color: var(--gold);
-  text-shadow: 1px 1px 0 #7A4800;
-  min-width: 40px;
-  text-align: right;
-}
+.footer-kr { font-size: 0.65rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800; min-width: 40px; text-align: right; }
 
-.add-task-row {
-  display: none;
-  padding: 0.5rem 0.75rem;
-  border-top: 2px dashed #000;
-  gap: 0.4rem;
-}
+.add-task-row { display: none; padding: 0.5rem 0.75rem; border-top: 2px dashed #555; gap: 0.4rem; }
 .edit-mode .add-task-row { display: flex; }
 
-.add-task-row input {
-  flex: 1;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  padding: 0.4rem;
-  background: #1A1A1A;
-  color: #fff;
-  border: 2px solid #000;
-}
-
-.add-task-row button {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  padding: 0.4rem 0.6rem;
-  background: var(--emerald-dark);
-  color: #fff;
-  border: 2px solid #000;
-  cursor: pointer;
-  white-space: nowrap;
-}
+.add-task-row input { flex: 1; font-family: 'Press Start 2P', monospace; font-size: 0.55rem; padding: 0.4rem; background: #1A1A1A; color: #fff; border: 2px solid #000; }
+.add-task-row button { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; padding: 0.4rem 0.6rem; background: var(--emerald-dark); color: #fff; border: 2px solid #000; cursor: pointer; white-space: nowrap; }
 
 .extras-section {
   background: var(--dirt);
@@ -315,233 +180,171 @@ header { text-align: center; margin-bottom: 2rem; }
     repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 6px),
     repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 6px);
   border: 4px solid #000;
-  box-shadow:
-    inset 2px 2px 0 rgba(255,255,255,0.15),
-    inset -2px -2px 0 rgba(0,0,0,0.4),
-    4px 4px 0 #000;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.15), inset -2px -2px 0 rgba(0,0,0,0.4), 4px 4px 0 #000;
+  margin-bottom: 1.5rem; overflow: hidden;
 }
 
-.extras-header {
-  background: var(--dirt-dark);
-  padding: 0.6rem 0.75rem;
-  border-bottom: 3px solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
+.extras-header { background: var(--dirt-dark); padding: 0.6rem 0.75rem; border-bottom: 3px solid #000; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.4rem; }
 
-.extras-title {
-  font-size: 0.77rem;
-  color: var(--gold);
-  text-shadow: 2px 2px 0 #7A4800;
-  letter-spacing: 0.5px;
-}
+.extras-title { font-size: 0.77rem; color: var(--gold); text-shadow: 2px 2px 0 #7A4800; letter-spacing: 0.5px; }
+.extras-subtitle { font-size: 0.65rem; color: #c8a86a; text-shadow: 1px 1px 0 #000; }
 
-.extras-subtitle {
-  font-size: 0.65rem;
-  color: #c8a86a;
-  text-shadow: 1px 1px 0 #000;
-}
+.extras-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); padding: 0.5rem; gap: 0.5rem; }
 
-.extras-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  padding: 0.5rem;
-  gap: 0.5rem;
-}
-
-.extra-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.7rem;
-  background: rgba(0,0,0,0.25);
-  border: 2px solid #000;
-  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
-  cursor: pointer;
-}
+.extra-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem; background: rgba(0,0,0,0.25); border: 2px solid #000; cursor: pointer; transition: background 0.1s; }
 
 .extra-item:hover { background: rgba(255,180,0,0.12); border-color: var(--gold-dark); }
 .extra-item.done { background: rgba(255,180,0,0.18); border-color: var(--gold-dark); }
 
 .extra-item input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #1A1A1A;
-  border: 3px solid #000;
-  box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
-  cursor: pointer;
-  flex-shrink: 0;
-  position: relative;
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px; background: #1A1A1A;
+  border: 3px solid #000; box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
+  cursor: pointer; flex-shrink: 0; position: relative;
 }
 
 .extra-item input[type="checkbox"]:checked { background: var(--gold-dark); }
 
 .extra-item input[type="checkbox"]:checked::after {
-  content: '✔';
-  position: absolute;
-  top: -2px;
-  left: 1px;
-  font-size: 15px;
-  color: var(--gold);
-  text-shadow: 1px 1px 0 #000;
-  font-family: monospace;
+  content: '✔'; position: absolute; top: -2px; left: 1px;
+  font-size: 15px; color: var(--gold); text-shadow: 1px 1px 0 #000; font-family: monospace;
 }
 
-.extra-item label {
-  font-size: 0.65rem;
-  color: #ddd;
-  text-shadow: 1px 1px 0 #000;
-  cursor: pointer;
-  flex: 1;
-  line-height: 1.8;
-  letter-spacing: 0.3px;
-}
+.extra-item label { font-size: 0.65rem; color: #ddd; text-shadow: 1px 1px 0 #000; cursor: pointer; flex: 1; line-height: 1.8; letter-spacing: 0.3px; }
 
-.extra-item .kr-badge {
-  font-size: 0.65rem;
-  color: var(--gold);
-  text-shadow: 1px 1px 0 #7A4800;
-  white-space: nowrap;
-}
+.extra-item .kr-badge { font-size: 0.65rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800; white-space: nowrap; }
 
 .extra-item .del-btn {
-  display: none;
-  background: var(--red);
-  color: #fff;
-  border: 2px solid #000;
-  width: 20px;
-  height: 20px;
-  font-size: 0.6rem;
-  cursor: pointer;
-  flex-shrink: 0;
-  line-height: 1;
+  display: none; background: var(--red); color: #fff;
+  border: 2px solid #000; width: 20px; height: 20px;
+  font-size: 0.6rem; cursor: pointer; flex-shrink: 0; line-height: 1;
 }
 .edit-mode .extra-item .del-btn { display: block; }
 
-.add-extra-row {
-  display: flex;
-  padding: 0.5rem 0.75rem;
-  gap: 0.4rem;
-  border-top: 2px dashed #000;
-  flex-wrap: wrap;
-}
+.add-extra-row { display: flex; padding: 0.5rem 0.75rem; gap: 0.4rem; border-top: 2px dashed #555; flex-wrap: wrap; }
 
-.add-extra-row input[type="text"] {
-  flex: 1;
-  min-width: 140px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  padding: 0.4rem;
-  background: #1A1A1A;
-  color: #fff;
-  border: 2px solid #000;
-}
+.add-extra-row input[type="text"] { flex: 1; min-width: 140px; font-family: 'Press Start 2P', monospace; font-size: 0.55rem; padding: 0.4rem; background: #1A1A1A; color: #fff; border: 2px solid #000; }
 
-.add-extra-row select, .add-extra-row button {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  padding: 0.4rem 0.5rem;
-  background: var(--gold-dark);
-  color: #1A1A1A;
-  border: 2px solid #000;
-  cursor: pointer;
-}
+.add-extra-row select, .add-extra-row button { font-family: 'Press Start 2P', monospace; font-size: 0.55rem; padding: 0.4rem 0.5rem; background: var(--gold-dark); color: #1A1A1A; border: 2px solid #000; cursor: pointer; }
 
-.bottom-bar {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
+.bottom-bar { max-width: 900px; margin: 0 auto; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 
 .btn {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.68rem;
-  padding: 0.6rem 1rem;
-  background: var(--stone-dark);
-  color: #ddd;
-  border: 3px solid #000;
-  box-shadow:
-    inset 1px 1px 0 rgba(255,255,255,0.2),
-    inset -1px -1px 0 rgba(0,0,0,0.4),
-    3px 3px 0 #000;
-  cursor: pointer;
-  text-shadow: 1px 1px 0 #000;
-  letter-spacing: 0.5px;
+  font-family: 'Press Start 2P', monospace; font-size: 0.68rem; padding: 0.6rem 1rem;
+  background: var(--stone-dark); color: #ddd; border: 3px solid #000;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2), inset -1px -1px 0 rgba(0,0,0,0.4), 3px 3px 0 #000;
+  cursor: pointer; text-shadow: 1px 1px 0 #000; letter-spacing: 0.5px;
   transition: transform 0.08s, box-shadow 0.08s;
 }
-
 .btn:hover { background: var(--stone); }
-.btn:active { transform: translate(2px, 2px); box-shadow: inset 1px 1px 0 rgba(0,0,0,0.4), 1px 1px 0 #000; }
-
+.btn:active { transform: translate(2px,2px); box-shadow: inset 1px 1px 0 rgba(0,0,0,0.4), 1px 1px 0 #000; }
 .btn-danger { background: var(--red); color: #fff; }
 .btn-danger:hover { background: #AA2222; }
-
 .btn-edit { background: var(--gold-dark); color: #1A1A1A; }
 .btn-edit:hover { background: #DDB800; }
 .btn-edit.active { background: var(--emerald-dark); color: #fff; }
 
-.saved-indicator {
-  font-size: 0.65rem;
-  color: var(--emerald);
-  text-shadow: 1px 1px 0 #000;
-  margin-left: auto;
-}
+.saved-indicator { font-size: 0.55rem; color: var(--emerald); text-shadow: 1px 1px 0 #000; margin-left: auto; }
 
 .toast {
-  position: fixed;
-  top: 1.5rem;
-  left: 50%;
+  position: fixed; top: 1.5rem; left: 50%;
   transform: translateX(-50%) translateY(-30px);
-  background: var(--wood-dark);
-  color: var(--gold);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.77rem;
-  padding: 0.75rem 1.25rem;
-  border: 4px solid #000;
-  box-shadow:
-    inset 1px 1px 0 rgba(255,255,255,0.2),
-    inset -1px -1px 0 rgba(0,0,0,0.4),
-    4px 4px 0 #000;
-  opacity: 0;
-  transition: all 0.25s ease;
-  pointer-events: none;
-  z-index: 100;
-  white-space: nowrap;
-  text-align: center;
-  text-shadow: 2px 2px 0 #7A4800;
-  letter-spacing: 0.5px;
+  background: var(--wood-dark); color: var(--gold);
+  font-family: 'Press Start 2P', monospace; font-size: 0.65rem;
+  padding: 0.75rem 1.25rem; border: 4px solid #000;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2), inset -1px -1px 0 rgba(0,0,0,0.4), 4px 4px 0 #000;
+  opacity: 0; transition: all 0.25s ease; pointer-events: none;
+  z-index: 100; white-space: nowrap; text-align: center;
+  text-shadow: 2px 2px 0 #7A4800; letter-spacing: 0.5px;
+  max-width: 90vw; white-space: normal;
 }
-
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-.edit-banner {
-  display: none;
-  max-width: 900px;
-  margin: 0 auto 1rem;
-  background: var(--gold-dark);
-  color: #1A1A1A;
-  font-size: 0.6rem;
-  padding: 0.6rem 0.9rem;
-  border: 3px solid #000;
-  text-align: center;
-  letter-spacing: 0.5px;
+
+.bonus-task {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 215, 0, 0.08);
+  border-top: 2px dashed var(--gold-dark);
+  cursor: pointer;
 }
-body.edit-mode .edit-banner { display: block; }
+.bonus-task:hover { background: rgba(255, 215, 0, 0.15); }
+.bonus-task input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px;
+  background: #1A1A1A;
+  border: 3px solid var(--gold-dark);
+  box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
+  cursor: pointer; flex-shrink: 0; position: relative;
+}
+.bonus-task input[type="checkbox"]:checked { background: var(--gold-dark); }
+.bonus-task input[type="checkbox"]:checked::after {
+  content: '✔'; position: absolute; top: -2px; left: 1px;
+  font-size: 15px; color: var(--gold); text-shadow: 1px 1px 0 #000; font-family: monospace;
+}
+.bonus-task label {
+  font-size: 0.6rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800;
+  cursor: pointer; flex: 1; line-height: 1.8; letter-spacing: 0.3px;
+}
+.bonus-task.done label { text-decoration: line-through; color: var(--gold-dark); }
+.bonus-badge {
+  font-size: 0.55rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800;
+  white-space: nowrap; font-family: 'Press Start 2P', monospace;
+}
+
+.edit-banner {
+  display: none; max-width: 900px; margin: 0 auto 1rem;
+  background: var(--gold-dark); color: #1A1A1A;
+  font-size: 0.6rem; padding: 0.6rem 0.9rem; border: 3px solid #000;
+  text-align: center; letter-spacing: 0.5px;
+}
+body.edit-mode 
+.bonus-task {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 215, 0, 0.08);
+  border-top: 2px dashed var(--gold-dark);
+  cursor: pointer;
+}
+.bonus-task:hover { background: rgba(255, 215, 0, 0.15); }
+.bonus-task input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px;
+  background: #1A1A1A;
+  border: 3px solid var(--gold-dark);
+  box-shadow: inset 1px 1px 0 #555, inset -1px -1px 0 #000;
+  cursor: pointer; flex-shrink: 0; position: relative;
+}
+.bonus-task input[type="checkbox"]:checked { background: var(--gold-dark); }
+.bonus-task input[type="checkbox"]:checked::after {
+  content: '✔'; position: absolute; top: -2px; left: 1px;
+  font-size: 15px; color: var(--gold); text-shadow: 1px 1px 0 #000; font-family: monospace;
+}
+.bonus-task label {
+  font-size: 0.6rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800;
+  cursor: pointer; flex: 1; line-height: 1.8; letter-spacing: 0.3px;
+}
+.bonus-task.done label { text-decoration: line-through; color: var(--gold-dark); }
+.bonus-badge {
+  font-size: 0.55rem; color: var(--gold); text-shadow: 1px 1px 0 #7A4800;
+  white-space: nowrap; font-family: 'Press Start 2P', monospace;
+}
+
+.edit-banner { display: block; }
+
+#loading-overlay {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1rem; z-index: 200;
+}
+#loading-overlay p { font-size: 0.6rem; color: var(--emerald); text-shadow: 1px 1px 0 #000; letter-spacing: 1px; }
 
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
+  content: ''; position: fixed; inset: 0;
   background-image:
     radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
     radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
@@ -551,14 +354,16 @@ body::before {
     radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
     radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
     radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,0.4) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
-
 body > * { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
+
+<div id="loading-overlay">
+  <p>⛏ KOBLER TIL... ⛏</p>
+</div>
 
 <div id="toast" class="toast"></div>
 
@@ -567,9 +372,10 @@ body > * { position: relative; z-index: 1; }
     <h1>⛏ <span>NIKAN</span> SIN UKEPLAN ⛏</h1>
   </div>
   <div class="week-label" id="week-label">Laster...</div>
+  <div class="sync-status" id="sync-status">Kobler til sky...</div>
 </header>
 
-<div class="edit-banner">✎ REDIGERINGSMODUS — endringer her er PERMANENTE og påvirker alle uker</div>
+<div class="edit-banner">✎ REDIGERINGSMODUS — endringer her er PERMANENTE og gjelder alle enheter</div>
 
 <div class="week-container">
   <div class="earnings-bar">
@@ -577,6 +383,10 @@ body > * { position: relative; z-index: 1; }
     <div class="earnings-row">
       <span>Dagoppgaver (20 kr/dag)</span>
       <span id="earn-daily">0 kr</span>
+    </div>
+    <div class="earnings-row">
+      <span>★ Mattebonus (5 kr/dag)</span>
+      <span id="earn-bonus">0 kr</span>
     </div>
     <div class="earnings-row">
       <span>Ekstraoppgaver (30 kr/stk)</span>
@@ -599,7 +409,7 @@ body > * { position: relative; z-index: 1; }
     <div class="add-extra-row">
       <input type="text" id="new-extra-input" placeholder="Ny ekstraoppgave...">
       <select id="new-extra-type">
-        <option value="temp">Midlertidig (forsvinner ved tøm)</option>
+        <option value="temp">Midlertidig</option>
         <option value="permanent">Permanent</option>
       </select>
       <button onclick="addExtraTask()">+ Legg til</button>
@@ -613,71 +423,47 @@ body > * { position: relative; z-index: 1; }
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCFx7_1ruJYSY2fqe6UVw-LrdoN1SU2Xh8",
+  authDomain: "nikan-ukeplan.firebaseapp.com",
+  projectId: "nikan-ukeplan",
+  storageBucket: "nikan-ukeplan.firebasestorage.app",
+  messagingSenderId: "357656097930",
+  appId: "1:357656097930:web:af2806de643fd7b84d2973"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const DEFAULT_DAYS_CONFIG = [
-  { key: 'mon', name: 'MANDAG', tasks: [
-    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
-    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
-  ]},
-  { key: 'tue', name: 'TIRSDAG', tasks: [
-    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
-    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
-  ]},
-  { key: 'wed', name: 'ONSDAG', tasks: [
-    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
-    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen'
-  ]},
-  { key: 'thu', name: 'TORSDAG', tasks: [
-    'Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner',
-    'Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen',
-    'Samtlige lekser ferdig'
-  ]},
-  { key: 'fri', name: 'FREDAG', tasks: [
-    'Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin',
-    'Skitne klær i skittentøyskurv','Re sengen'
-  ]},
-  { key: 'sat', name: 'LØRDAG', tasks: [
-    'Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv'
-  ]},
-  { key: 'sun', name: 'SØNDAG', tasks: [
-    'Legge frem klær til neste dag','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv'
-  ]}
+  { key: 'mon', name: 'MANDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
+  { key: 'tue', name: 'TIRSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
+  { key: 'wed', name: 'ONSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
+  { key: 'thu', name: 'TORSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Samtlige lekser ferdig']},
+  { key: 'fri', name: 'FREDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
+  { key: 'sat', name: 'LØRDAG', tasks: ['Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv']},
+  { key: 'sun', name: 'SØNDAG', tasks: ['Legge frem klær til neste dag','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv']}
 ];
 
-const DEFAULT_EXTRAS = [
-  'Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran',
-  'Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'
-];
+const DEFAULT_EXTRAS = ['Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran','Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'];
 
 const DAY_REWARD = 20;
 const EXTRA_REWARD = 30;
-const STATE_KEY = 'nikan_tracker_v5';
-const TEMPLATE_KEY = 'nikan_templates_v1';
 
 let DAYS_CONFIG = [];
 let PERMANENT_EXTRAS = [];
 let state = {};
 let editMode = false;
 let shownCompleted = {};
+let savingTemplate = false;
+let savingState = false;
 
-function loadTemplates() {
-  try {
-    const raw = localStorage.getItem(TEMPLATE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      DAYS_CONFIG = parsed.days;
-      PERMANENT_EXTRAS = parsed.extras;
-      return;
-    }
-  } catch(e) {}
-  DAYS_CONFIG = JSON.parse(JSON.stringify(DEFAULT_DAYS_CONFIG));
-  PERMANENT_EXTRAS = [...DEFAULT_EXTRAS];
-  saveTemplates();
-}
-
-function saveTemplates() {
-  localStorage.setItem(TEMPLATE_KEY, JSON.stringify({ days: DAYS_CONFIG, extras: PERMANENT_EXTRAS }));
-}
+const templateRef = doc(db, 'nikan', 'templates');
+const stateRef = doc(db, 'nikan', getWeekKey());
 
 function getWeekKey() {
   const now = new Date();
@@ -686,7 +472,7 @@ function getWeekKey() {
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+  return `week_${d.getUTCFullYear()}_${String(weekNo).padStart(2,'0')}`;
 }
 
 function getWeekLabel() {
@@ -697,29 +483,42 @@ function getWeekLabel() {
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate() + 6);
   const fmt = d => d.toLocaleDateString('no-NO', { day: 'numeric', month: 'long' });
-  return `UKE ${getWeekKey().split('W')[1]}  ·  ${fmt(monday)} – ${fmt(sunday)}`;
+  const wk = getWeekKey().split('_');
+  return `UKE ${wk[2]}  ·  ${fmt(monday)} – ${fmt(sunday)}`;
 }
 
-// state.days[dayKey] = { taskText: true/false, ... }  (keyed by task text, not index, so template edits don't break checks)
-// state.extras = { taskText: true/false } for permanent extras, keyed by text
-// state.tempExtras = [{ text, done }] for temporary one-off extras
+function setSyncStatus(msg, cls) {
+  const el = document.getElementById('sync-status');
+  el.textContent = msg;
+  el.className = 'sync-status' + (cls ? ' ' + cls : '');
+}
 
-function loadState() {
+async function saveTemplates() {
+  if (savingTemplate) return;
+  savingTemplate = true;
   try {
-    const raw = localStorage.getItem(STATE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed.weekKey === getWeekKey()) {
-        if (!parsed.tempExtras) parsed.tempExtras = [];
-        return parsed;
-      }
-    }
-  } catch(e) {}
-  return { weekKey: getWeekKey(), days: {}, extras: {}, tempExtras: [] };
+    await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS });
+    setSyncStatus('☁ Synkronisert', 'ok');
+  } catch(e) {
+    setSyncStatus('⚠ Feil ved lagring', 'err');
+  }
+  savingTemplate = false;
 }
 
-function saveState() {
-  localStorage.setItem(STATE_KEY, JSON.stringify(state));
+async function saveState() {
+  if (savingState) return;
+  savingState = true;
+  showSavedIndicator();
+  try {
+    await setDoc(stateRef, state);
+    setSyncStatus('☁ Synkronisert', 'ok');
+  } catch(e) {
+    setSyncStatus('⚠ Feil ved lagring', 'err');
+  }
+  savingState = false;
+}
+
+function showSavedIndicator() {
   const ind = document.getElementById('saved-indicator');
   if (ind) {
     ind.textContent = '✔ LAGRET';
@@ -729,25 +528,28 @@ function saveState() {
 
 function calcEarnings() {
   let daily = 0;
+  let bonus = 0;
   DAYS_CONFIG.forEach(day => {
-    const ds = state.days[day.key] || {};
+    const ds = (state.days || {})[day.key] || {};
     const done = day.tasks.filter(t => ds[t]).length;
     if (done === day.tasks.length && day.tasks.length > 0) daily += DAY_REWARD;
+    if ((state.bonus || {})[day.key]) bonus += 5;
   });
   let extras = 0;
-  PERMANENT_EXTRAS.forEach(t => { if (state.extras[t]) extras += EXTRA_REWARD; });
+  PERMANENT_EXTRAS.forEach(t => { if ((state.extras || {})[t]) extras += EXTRA_REWARD; });
   (state.tempExtras || []).forEach(item => { if (item.done) extras += EXTRA_REWARD; });
-  return { daily, extras, total: daily + extras };
+  return { daily, bonus, extras, total: daily + bonus + extras };
 }
 
 function updateEarnings() {
-  const { daily, extras, total } = calcEarnings();
+  const { daily, bonus, extras, total } = calcEarnings();
   document.getElementById('earn-daily').textContent = daily + ' kr';
+  document.getElementById('earn-bonus').textContent = bonus + ' kr';
   document.getElementById('earn-extras').textContent = extras + ' kr';
   document.getElementById('earn-total').textContent = total + ' kr';
 }
 
-function toggleEditMode() {
+window.toggleEditMode = function() {
   editMode = !editMode;
   document.body.classList.toggle('edit-mode', editMode);
   const btn = document.getElementById('edit-toggle-btn');
@@ -755,14 +557,14 @@ function toggleEditMode() {
   btn.classList.toggle('active', editMode);
   renderDays();
   renderExtras();
-}
+};
 
 function renderDays() {
   const grid = document.getElementById('days-grid');
   grid.innerHTML = '';
 
   DAYS_CONFIG.forEach(day => {
-    const dayState = state.days[day.key] || {};
+    const dayState = (state.days || {})[day.key] || {};
     const totalTasks = day.tasks.length;
     const doneTasks = day.tasks.filter(t => dayState[t]).length;
     const allDone = doneTasks === totalTasks && totalTasks > 0;
@@ -772,8 +574,7 @@ function renderDays() {
 
     const header = document.createElement('div');
     header.className = 'day-header';
-    let badgeText = allDone ? '★ FULLFØRT' : `${doneTasks}/${totalTasks}`;
-    header.innerHTML = `<span class="day-name">${day.name}</span><span class="day-badge">${badgeText}</span>`;
+    header.innerHTML = `<span class="day-name">${day.name}</span><span class="day-badge">${allDone ? '★ FULLFØRT' : `${doneTasks}/${totalTasks}`}</span>`;
     card.appendChild(header);
 
     const list = document.createElement('div');
@@ -786,15 +587,13 @@ function renderDays() {
 
       const cb = document.createElement('input');
       cb.type = 'checkbox';
-      const cbId = `${day.key}-${task}`.replace(/\s+/g, '_');
-      cb.id = cbId;
       cb.checked = checked;
 
       const lbl = document.createElement('label');
-      lbl.htmlFor = cbId;
       lbl.textContent = task;
 
       cb.addEventListener('change', () => {
+        if (!state.days) state.days = {};
         if (!state.days[day.key]) state.days[day.key] = {};
         state.days[day.key][task] = cb.checked;
         saveState();
@@ -812,10 +611,9 @@ function renderDays() {
       const delBtn = document.createElement('button');
       delBtn.className = 'del-btn';
       delBtn.textContent = '✕';
-      delBtn.title = 'Fjern oppgave permanent';
       delBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (!confirm(`Fjerne "${task}" fra ${day.name} permanent? Dette gjelder for alle fremtidige uker.`)) return;
+        if (!confirm(`Fjerne "${task}" fra ${day.name} permanent?`)) return;
         day.tasks = day.tasks.filter(t => t !== task);
         saveTemplates();
         renderDays();
@@ -830,35 +628,57 @@ function renderDays() {
 
     card.appendChild(list);
 
+    // Bonus task
+    const bonusDone = !!(state.bonus || {})[day.key];
+    const bonusItem = document.createElement('div');
+    bonusItem.className = 'bonus-task' + (bonusDone ? ' done' : '');
+    const bonusCb = document.createElement('input');
+    bonusCb.type = 'checkbox';
+    bonusCb.checked = bonusDone;
+    const bonusLbl = document.createElement('label');
+    bonusLbl.textContent = '15 min matte';
+    const bonusBadge = document.createElement('span');
+    bonusBadge.className = 'bonus-badge';
+    bonusBadge.textContent = '+5 kr';
+    bonusCb.addEventListener('change', () => {
+      if (!state.bonus) state.bonus = {};
+      state.bonus[day.key] = bonusCb.checked;
+      saveState();
+      updateEarnings();
+      bonusItem.className = 'bonus-task' + (bonusCb.checked ? ' done' : '');
+    });
+    bonusItem.appendChild(bonusCb);
+    bonusItem.appendChild(bonusLbl);
+    bonusItem.appendChild(bonusBadge);
+    card.appendChild(bonusItem);
+
     const pct = totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0;
     const footer = document.createElement('div');
     footer.className = 'day-footer';
-    footer.innerHTML = `
-      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-      <span class="footer-kr">${allDone ? DAY_REWARD + ' kr' : ''}</span>
-    `;
+    const dayTotal = (allDone ? DAY_REWARD : 0) + (bonusDone ? 5 : 0);
+    footer.innerHTML = `<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div><span class="footer-kr">${dayTotal > 0 ? dayTotal + ' kr' : ''}</span>`;
     card.appendChild(footer);
 
     if (editMode) {
       const addRow = document.createElement('div');
       addRow.className = 'add-task-row';
-      addRow.innerHTML = `
-        <input type="text" placeholder="Ny fast oppgave...">
-        <button>+ Legg til</button>
-      `;
-      const input = addRow.querySelector('input');
-      const btn = addRow.querySelector('button');
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.placeholder = 'Ny fast oppgave...';
+      const btn = document.createElement('button');
+      btn.textContent = '+ Legg til';
       const submit = () => {
-        const val = input.value.trim();
-        if (!val) return;
-        if (day.tasks.includes(val)) { input.value = ''; return; }
+        const val = inp.value.trim();
+        if (!val || day.tasks.includes(val)) return;
         day.tasks.push(val);
         saveTemplates();
         renderDays();
         updateEarnings();
       };
       btn.addEventListener('click', submit);
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+      addRow.appendChild(inp);
+      addRow.appendChild(btn);
       card.appendChild(addRow);
     }
 
@@ -871,18 +691,15 @@ function renderExtras() {
   grid.innerHTML = '';
 
   PERMANENT_EXTRAS.forEach((task) => {
-    const checked = !!state.extras[task];
+    const checked = !!(state.extras || {})[task];
     const item = document.createElement('div');
     item.className = 'extra-item' + (checked ? ' done' : '');
 
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    const cbId = `extra-${task}`.replace(/\s+/g, '_');
-    cb.id = cbId;
     cb.checked = checked;
 
     const lbl = document.createElement('label');
-    lbl.htmlFor = cbId;
     lbl.textContent = task;
 
     const badge = document.createElement('span');
@@ -890,6 +707,7 @@ function renderExtras() {
     badge.textContent = '30 kr';
 
     cb.addEventListener('change', () => {
+      if (!state.extras) state.extras = {};
       state.extras[task] = cb.checked;
       saveState();
       updateEarnings();
@@ -899,10 +717,9 @@ function renderExtras() {
     const delBtn = document.createElement('button');
     delBtn.className = 'del-btn';
     delBtn.textContent = '✕';
-    delBtn.title = 'Fjern permanent';
     delBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (!confirm(`Fjerne "${task}" fra ekstraoppgaver permanent?`)) return;
+      if (!confirm(`Fjerne "${task}" permanent?`)) return;
       PERMANENT_EXTRAS = PERMANENT_EXTRAS.filter(t => t !== task);
       saveTemplates();
       renderExtras();
@@ -922,13 +739,10 @@ function renderExtras() {
 
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    const cbId = `tempextra-${idx}`;
-    cb.id = cbId;
     cb.checked = te.done;
 
     const lbl = document.createElement('label');
-    lbl.htmlFor = cbId;
-    lbl.textContent = te.text + ' (engang)';
+    lbl.textContent = te.text + ' ★';
 
     const badge = document.createElement('span');
     badge.className = 'kr-badge';
@@ -945,7 +759,6 @@ function renderExtras() {
     delBtn.className = 'del-btn';
     delBtn.style.display = 'block';
     delBtn.textContent = '✕';
-    delBtn.title = 'Fjern';
     delBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       state.tempExtras.splice(idx, 1);
@@ -962,12 +775,11 @@ function renderExtras() {
   });
 }
 
-function addExtraTask() {
+window.addExtraTask = function() {
   const input = document.getElementById('new-extra-input');
   const type = document.getElementById('new-extra-type').value;
   const val = input.value.trim();
   if (!val) return;
-
   if (type === 'permanent') {
     if (!PERMANENT_EXTRAS.includes(val)) {
       PERMANENT_EXTRAS.push(val);
@@ -975,17 +787,29 @@ function addExtraTask() {
     }
   } else {
     if (!state.tempExtras) state.tempExtras = [];
+    if (!state.bonus) state.bonus = {};
     state.tempExtras.push({ text: val, done: false });
     saveState();
   }
   input.value = '';
   renderExtras();
   updateEarnings();
-}
+};
 
 document.getElementById('new-extra-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addExtraTask();
+  if (e.key === 'Enter') window.addExtraTask();
 });
+
+window.resetWeek = async function() {
+  if (!confirm('Tøm ukearket? Avkryssing og midlertidige ekstraoppgaver slettes. Faste oppgaver beholdes.')) return;
+  state = { days: {}, extras: {}, tempExtras: [], bonus: {} };
+  shownCompleted = {};
+  await saveState();
+  renderDays();
+  renderExtras();
+  updateEarnings();
+  showToast('☠ UKEARK TØMT', 2000);
+};
 
 function showToast(msg, duration) {
   const t = document.getElementById('toast');
@@ -994,24 +818,65 @@ function showToast(msg, duration) {
   setTimeout(() => { t.className = 'toast'; }, duration || 2000);
 }
 
-function resetWeek() {
-  if (!confirm('Tøm ukearket? All avkryssing og midlertidige ekstraoppgaver slettes. Faste oppgaver/maler beholdes.')) return;
-  state = { weekKey: getWeekKey(), days: {}, extras: {}, tempExtras: [] };
-  shownCompleted = {};
-  saveState();
-  renderDays();
-  renderExtras();
-  updateEarnings();
-  showToast('☠ UKEARK TØMT', 2000);
-}
-
-function init() {
+async function init() {
   document.getElementById('week-label').textContent = getWeekLabel();
-  loadTemplates();
-  state = loadState();
-  renderDays();
-  renderExtras();
-  updateEarnings();
+
+  try {
+    // Load templates
+    const tmplSnap = await getDoc(templateRef);
+    if (tmplSnap.exists()) {
+      const data = tmplSnap.data();
+      DAYS_CONFIG = data.days;
+      PERMANENT_EXTRAS = data.extras;
+    } else {
+      DAYS_CONFIG = JSON.parse(JSON.stringify(DEFAULT_DAYS_CONFIG));
+      PERMANENT_EXTRAS = [...DEFAULT_EXTRAS];
+      await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS });
+    }
+
+    // Load week state
+    const stateSnap = await getDoc(stateRef);
+    state = stateSnap.exists() ? stateSnap.data() : { days: {}, extras: {}, tempExtras: [] };
+    if (!state.tempExtras) state.tempExtras = [];
+    if (!state.bonus) state.bonus = {};
+
+    document.getElementById('loading-overlay').style.display = 'none';
+    setSyncStatus('☁ Synkronisert', 'ok');
+    renderDays();
+    renderExtras();
+    updateEarnings();
+
+    // Live updates from other devices
+    onSnapshot(templateRef, (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      DAYS_CONFIG = data.days;
+      PERMANENT_EXTRAS = data.extras;
+      renderDays();
+      renderExtras();
+      updateEarnings();
+    });
+
+    onSnapshot(stateRef, (snap) => {
+      if (!snap.exists()) return;
+      const remote = snap.data();
+      if (!remote.tempExtras) remote.tempExtras = [];
+      state = remote;
+      renderDays();
+      renderExtras();
+      updateEarnings();
+    });
+
+  } catch(e) {
+    document.getElementById('loading-overlay').style.display = 'none';
+    setSyncStatus('⚠ Ingen tilkobling – jobber offline', 'err');
+    DAYS_CONFIG = JSON.parse(JSON.stringify(DEFAULT_DAYS_CONFIG));
+    PERMANENT_EXTRAS = [...DEFAULT_EXTRAS];
+    state = { days: {}, extras: {}, tempExtras: [], bonus: {} };
+    renderDays();
+    renderExtras();
+    updateEarnings();
+  }
 }
 
 init();
