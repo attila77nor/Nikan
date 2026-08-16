@@ -193,6 +193,13 @@ header { text-align: center; margin-bottom: 2rem; }
 
 .extra-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem; background: rgba(0,0,0,0.25); border: 2px solid #000; cursor: pointer; transition: background 0.1s; }
 
+
+.locked-extra {
+  opacity: 0.4;
+  pointer-events: none;
+  filter: grayscale(60%);
+}
+
 .extra-item:hover { background: rgba(255,180,0,0.12); border-color: var(--gold-dark); }
 .extra-item.done { background: rgba(255,180,0,0.18); border-color: var(--gold-dark); }
 
@@ -385,11 +392,11 @@ body > * { position: relative; z-index: 1; }
       <span id="earn-daily">0 kr</span>
     </div>
     <div class="earnings-row">
-      <span>★ Mattebonus (5 kr/dag)</span>
+      <span>★ Mattebonus (20 kr/dag)</span>
       <span id="earn-bonus">0 kr</span>
     </div>
     <div class="earnings-row">
-      <span>Ekstraoppgaver (30 kr/stk)</span>
+      <span>Ekstraoppgaver (20 kr/stk)</span>
       <span id="earn-extras">0 kr</span>
     </div>
     <div class="earnings-row total">
@@ -403,8 +410,9 @@ body > * { position: relative; z-index: 1; }
   <div class="extras-section">
     <div class="extras-header">
       <span class="extras-title">★ EKSTRAOPPGAVER</span>
-      <span class="extras-subtitle">30 kr per oppgave</span>
+      <span class="extras-subtitle">20 kr per oppgave</span>
     </div>
+    <div id="extras-lock-notice" style="display:none;font-family:'Press Start 2P',monospace;font-size:0.5rem;color:#888;text-shadow:1px 1px 0 #000;padding:0.6rem 0.75rem;border-bottom:2px solid #000;letter-spacing:0.5px;">🔒 Fullfør dagens oppgaver først</div>
     <div class="extras-grid" id="extras-grid"></div>
     <div class="add-extra-row">
       <input type="text" id="new-extra-input" placeholder="Ny ekstraoppgave...">
@@ -440,19 +448,19 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const DEFAULT_DAYS_CONFIG = [
-  { key: 'mon', name: 'MANDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
-  { key: 'tue', name: 'TIRSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
-  { key: 'wed', name: 'ONSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
-  { key: 'thu', name: 'TORSDAG', tasks: ['Legge frem klær til neste dag','Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Samtlige lekser ferdig']},
-  { key: 'fri', name: 'FREDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen']},
-  { key: 'sat', name: 'LØRDAG', tasks: ['Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv']},
-  { key: 'sun', name: 'SØNDAG', tasks: ['Legge frem klær til neste dag','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv']}
+  { key: 'mon', name: 'MANDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
+  { key: 'tue', name: 'TIRSDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
+  { key: 'wed', name: 'ONSDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
+  { key: 'thu', name: 'TORSDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Samtlige lekser ferdig','Arbeidsliste oppdatert']},
+  { key: 'fri', name: 'FREDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
+  { key: 'sat', name: 'LØRDAG', tasks: ['Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Arbeidsliste oppdatert']},
+  { key: 'sun', name: 'SØNDAG', tasks: ['Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Legge frem klær til i morgen','Arbeidsliste oppdatert']}
 ];
 
 const DEFAULT_EXTRAS = ['Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran','Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'];
 
 const DAY_REWARD = 20;
-const EXTRA_REWARD = 30;
+const EXTRA_REWARD = 20;
 
 let DAYS_CONFIG = [];
 let PERMANENT_EXTRAS = [];
@@ -533,7 +541,7 @@ function calcEarnings() {
     const ds = (state.days || {})[day.key] || {};
     const done = day.tasks.filter(t => ds[t]).length;
     if (done === day.tasks.length && day.tasks.length > 0) daily += DAY_REWARD;
-    if ((state.bonus || {})[day.key]) bonus += 5;
+    if ((state.bonus || {})[day.key]) bonus += 20;
   });
   let extras = 0;
   PERMANENT_EXTRAS.forEach(t => { if ((state.extras || {})[t]) extras += EXTRA_REWARD; });
@@ -606,6 +614,7 @@ function renderDays() {
           shownCompleted[day.key] = false;
         }
         renderDays();
+        renderExtras();
       });
 
       const delBtn = document.createElement('button');
@@ -639,7 +648,7 @@ function renderDays() {
     bonusLbl.textContent = '15 min matte';
     const bonusBadge = document.createElement('span');
     bonusBadge.className = 'bonus-badge';
-    bonusBadge.textContent = '+5 kr';
+    bonusBadge.textContent = '+20 kr';
     bonusCb.addEventListener('change', () => {
       if (!state.bonus) state.bonus = {};
       state.bonus[day.key] = bonusCb.checked;
@@ -690,10 +699,23 @@ function renderExtras() {
   const grid = document.getElementById('extras-grid');
   grid.innerHTML = '';
 
+  // Check if today's tasks are all done — if so, unlock extras
+  const jsDay = new Date().getDay();
+  const todayIndex = jsDay === 0 ? 6 : jsDay - 1;
+  const keyOrder = ['mon','tue','wed','thu','fri','sat','sun'];
+  const todayKey = keyOrder[todayIndex];
+  const todayConfig = DAYS_CONFIG.find(d => d.key === todayKey);
+  const todayState = (state.days || {})[todayKey] || {};
+  const todayDone = todayConfig ? todayConfig.tasks.every(t => todayState[t]) : true;
+
+  // Show lock notice if not done
+  const lockNotice = document.getElementById('extras-lock-notice');
+  if (lockNotice) lockNotice.style.display = todayDone ? 'none' : 'block';
+
   PERMANENT_EXTRAS.forEach((task) => {
     const checked = !!(state.extras || {})[task];
     const item = document.createElement('div');
-    item.className = 'extra-item' + (checked ? ' done' : '');
+    item.className = 'extra-item' + (checked ? ' done' : '') + (!todayDone ? ' locked-extra' : '');
 
     const cb = document.createElement('input');
     cb.type = 'checkbox';
@@ -706,7 +728,9 @@ function renderExtras() {
     badge.className = 'kr-badge';
     badge.textContent = '30 kr';
 
+    if (!todayDone) cb.disabled = true;
     cb.addEventListener('change', () => {
+      if (!todayDone) return;
       if (!state.extras) state.extras = {};
       state.extras[task] = cb.checked;
       saveState();
