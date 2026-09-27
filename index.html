@@ -256,7 +256,8 @@ const DAY_REWARD = 20;
 const EXTRA_REWARD = 20;
 const MATTE_EXTRA = '15 min matte';
 const MATTE_EXTRA_REWARD = 30;
-const TEMPLATE_VERSION = 2; // v2: "15 min matte" lagt til i ekstraoppgavene
+const TEMPLATE_VERSION = 3; // v2: "15 min matte" lagt til i ekstraoppgavene, v3: "Rydde rommet sitt" -> "Rydde og støvsuge rommet"
+const RENAMED_TASKS = { 'Rydde rommet sitt': 'Rydde og støvsuge rommet' };
 function extraReward(task) { return task === MATTE_EXTRA ? MATTE_EXTRA_REWARD : EXTRA_REWARD; }
 
 const DEFAULT_DAYS_CONFIG = [
@@ -265,7 +266,7 @@ const DEFAULT_DAYS_CONFIG = [
   { key: 'wed', name: 'ONSDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
   { key: 'thu', name: 'TORSDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Samtlige lekser ferdig','Arbeidsliste oppdatert']},
   { key: 'fri', name: 'FREDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
-  { key: 'sat', name: 'LØRDAG', tasks: ['Rydde rommet sitt','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Arbeidsliste oppdatert']},
+  { key: 'sat', name: 'LØRDAG', tasks: ['Rydde og støvsuge rommet','Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Arbeidsliste oppdatert']},
   { key: 'sun', name: 'SØNDAG', tasks: ['Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Legge frem klær til i morgen','Arbeidsliste oppdatert']}
 ];
 
@@ -596,9 +597,10 @@ async function init() {
     if (tmplSnap.exists()) {
       const data = tmplSnap.data();
       DAYS_CONFIG = data.days; PERMANENT_EXTRAS = data.extras || [];
-      // Engangs-migrering: legg til "15 min matte" i eksisterende maler
+      // Engangs-migrering av eksisterende maler (se TEMPLATE_VERSION)
       if ((data.version || 1) < TEMPLATE_VERSION) {
         if (!PERMANENT_EXTRAS.includes(MATTE_EXTRA)) PERMANENT_EXTRAS.unshift(MATTE_EXTRA);
+        DAYS_CONFIG.forEach(d => { d.tasks = d.tasks.map(t => RENAMED_TASKS[t] || t); });
         await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS, version: TEMPLATE_VERSION });
       }
     } else {
@@ -611,6 +613,9 @@ async function init() {
     state = stateSnap.exists() ? stateSnap.data() : { days: {}, extras: {}, tempExtras: [], matte: {} };
     if (!state.tempExtras) state.tempExtras = [];
     if (!state.matte) state.matte = {};
+    Object.values(state.days || {}).forEach(ds => {
+      Object.entries(RENAMED_TASKS).forEach(([oldT, newT]) => { if (oldT in ds && !(newT in ds)) ds[newT] = ds[oldT]; });
+    });
 
     document.getElementById('loading-overlay').style.display = 'none';
     setSyncStatus('☁ Synkronisert', 'ok');
