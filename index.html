@@ -194,13 +194,12 @@ body > * { position: relative; z-index: 1; }
   <div class="earnings-bar">
     <div class="earnings-title">▶ UKENS BELØNNING</div>
     <div class="earnings-row"><span>Dagoppgaver (20 kr/dag)</span><span id="earn-daily">0 kr</span></div>
-    <div class="earnings-row"><span>Matteøving (15 kr/økt)</span><span id="earn-matte">0 kr</span></div>
-    <div class="earnings-row"><span>Ekstraoppgaver (20 kr/stk)</span><span id="earn-extras">0 kr</span></div>
+    <div class="earnings-row"><span>Ekstraoppgaver (20 kr/stk, 15 min matte 30 kr)</span><span id="earn-extras">0 kr</span></div>
     <div class="earnings-row total"><span>★ TOTALT TJENT</span><span id="earn-total">0 kr</span></div>
   </div>
 
   <div class="candy-counter" id="candy-counter">
-    <div class="candy-counter-text" id="candy-text">🍬 0 av 3 matteøkter denne uken</div>
+    <div class="candy-counter-text" id="candy-text">🎮 0 av 3 matteøkter gjort – 500 Robux</div>
     <div class="candy-pips">
       <div class="candy-pip" id="pip-0"></div>
       <div class="candy-pip" id="pip-1"></div>
@@ -213,7 +212,7 @@ body > * { position: relative; z-index: 1; }
   <div class="extras-section">
     <div class="extras-header">
       <span class="extras-title">★ EKSTRAOPPGAVER</span>
-      <span class="extras-subtitle">20 kr per oppgave</span>
+      <span class="extras-subtitle">20 kr per oppgave · 15 min matte 30 kr</span>
     </div>
     <div id="extras-lock-notice" style="display:none;font-family:'Press Start 2P',monospace;font-size:0.5rem;color:#888;text-shadow:1px 1px 0 #000;padding:0.6rem 0.75rem;border-bottom:2px solid #000;letter-spacing:0.5px;">🔒 Fullfør dagens oppgaver først</div>
     <div class="extras-grid" id="extras-grid"></div>
@@ -250,11 +249,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Matte days: mon, wed, fri
+// Matte days: mon, wed, fri – 3 av 3 gir 500 Robux (ingen penger)
 const MATTE_DAYS = ['mon', 'wed', 'fri'];
-const MATTE_REWARD = 15;
+const MATTE_ROBUX = 500;
 const DAY_REWARD = 20;
 const EXTRA_REWARD = 20;
+const MATTE_EXTRA = '15 min matte';
+const MATTE_EXTRA_REWARD = 30;
+const TEMPLATE_VERSION = 2; // v2: "15 min matte" lagt til i ekstraoppgavene
+function extraReward(task) { return task === MATTE_EXTRA ? MATTE_EXTRA_REWARD : EXTRA_REWARD; }
 
 const DEFAULT_DAYS_CONFIG = [
   { key: 'mon', name: 'MANDAG', tasks: ['Pakke sekken sin','Pusse tenner','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Re sengen','Legge frem klær til i morgen','Arbeidsliste oppdatert']},
@@ -266,7 +269,7 @@ const DEFAULT_DAYS_CONFIG = [
   { key: 'sun', name: 'SØNDAG', tasks: ['Re sengen','Rydde inn i oppvaskmaskin','Skitne klær i skittentøyskurv','Legge frem klær til i morgen','Arbeidsliste oppdatert']}
 ];
 
-const DEFAULT_EXTRAS = ['Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran','Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'];
+const DEFAULT_EXTRAS = [MATTE_EXTRA,'Støvsuge bilen','Klippe gresset hagen','Klippe gresset foran','Støvsuge rommet sitt','Tørke støv på lister','Henge klær til tørk','Legge på plass tørre klær'];
 
 let DAYS_CONFIG = [];
 let PERMANENT_EXTRAS = [];
@@ -311,7 +314,7 @@ function setSyncStatus(msg, cls) {
 async function saveTemplates() {
   if (savingTemplate) return;
   savingTemplate = true;
-  try { await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS }); setSyncStatus('☁ Synkronisert', 'ok'); }
+  try { await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS, version: TEMPLATE_VERSION }); setSyncStatus('☁ Synkronisert', 'ok'); }
   catch(e) { setSyncStatus('⚠ Feil ved lagring', 'err'); }
   savingTemplate = false;
 }
@@ -337,17 +340,15 @@ function calcEarnings() {
     const done = day.tasks.filter(t => ds[t]).length;
     if (done === day.tasks.length && day.tasks.length > 0) daily += DAY_REWARD;
   });
-  const matte = matteCount() * MATTE_REWARD;
   let extras = 0;
-  PERMANENT_EXTRAS.forEach(t => { if ((state.extras || {})[t]) extras += EXTRA_REWARD; });
+  PERMANENT_EXTRAS.forEach(t => { if ((state.extras || {})[t]) extras += extraReward(t); });
   (state.tempExtras || []).forEach(item => { if (item.done) extras += EXTRA_REWARD; });
-  return { daily, matte, extras, total: daily + matte + extras };
+  return { daily, extras, total: daily + extras };
 }
 
 function updateEarnings() {
-  const { daily, matte, extras, total } = calcEarnings();
+  const { daily, extras, total } = calcEarnings();
   document.getElementById('earn-daily').textContent = daily + ' kr';
-  document.getElementById('earn-matte').textContent = matte + ' kr';
   document.getElementById('earn-extras').textContent = extras + ' kr';
   document.getElementById('earn-total').textContent = total + ' kr';
   updateCandyCounter();
@@ -356,10 +357,10 @@ function updateEarnings() {
 function updateCandyCounter() {
   const count = matteCount();
   const msgs = [
-    '🍬 0 av 3 matteøkter denne uken',
-    '🍬 1 av 3 nærmere godteri!',
-    '🍬 2 av 3 gjort – snart godteri!',
-    '🍭 YES! 3 av 3 – CANDY TIME! 🍭'
+    `🎮 0 av 3 matteøkter gjort – ${MATTE_ROBUX} Robux`,
+    `🎮 1 av 3 gjort – på vei mot ${MATTE_ROBUX} Robux!`,
+    `🎮 2 av 3 gjort – snart ${MATTE_ROBUX} Robux!`,
+    `🎮 YES! 3 av 3 – ${MATTE_ROBUX} ROBUX! 🎮`
   ];
   document.getElementById('candy-text').textContent = msgs[count];
   for (let i = 0; i < 3; i++) {
@@ -367,7 +368,7 @@ function updateCandyCounter() {
   }
   if (count === 3 && !candyShown) {
     candyShown = true;
-    showToast('🍭 CANDY TIME! Nikan fortjener ett godteri! 🍭', 4000, true);
+    showToast(`🎮 3 av 3 matteøkter! Nikan har tjent ${MATTE_ROBUX} Robux! 🎮`, 4000, true);
   }
 }
 
@@ -430,7 +431,7 @@ function renderDays() {
 
     card.appendChild(list);
 
-    // Matte bonus only on mon/wed/fri
+    // Matteøving only on mon/wed/fri – counts toward Robux, gives no kr
     if (hasMatte) {
       const matteDone = !!(state.matte || {})[day.key];
       const matteItem = document.createElement('div');
@@ -440,7 +441,7 @@ function renderDays() {
       const matteLbl = document.createElement('label');
       matteLbl.textContent = '9 min matteøving';
       const matteBadge = document.createElement('span');
-      matteBadge.className = 'matte-badge'; matteBadge.textContent = '+15 kr';
+      matteBadge.className = 'matte-badge'; matteBadge.textContent = '🎮 3/3 → Robux';
 
       matteCb.addEventListener('change', () => {
         if (!state.matte) state.matte = {};
@@ -456,8 +457,7 @@ function renderDays() {
     const pct = totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0;
     const footer = document.createElement('div');
     footer.className = 'day-footer';
-    const matteEarned = hasMatte && !!(state.matte || {})[day.key] ? MATTE_REWARD : 0;
-    const dayTotal = (allDone ? DAY_REWARD : 0) + matteEarned;
+    const dayTotal = allDone ? DAY_REWARD : 0;
     footer.innerHTML = `<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div><span class="footer-kr">${dayTotal > 0 ? dayTotal + ' kr' : ''}</span>`;
     card.appendChild(footer);
 
@@ -503,7 +503,7 @@ function renderExtras() {
     const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = checked;
     if (!todayDone) cb.disabled = true;
     const lbl = document.createElement('label'); lbl.textContent = task;
-    const badge = document.createElement('span'); badge.className = 'kr-badge'; badge.textContent = '20 kr';
+    const badge = document.createElement('span'); badge.className = 'kr-badge'; badge.textContent = extraReward(task) + ' kr';
 
     cb.addEventListener('change', () => {
       if (!todayDone) return;
@@ -595,11 +595,16 @@ async function init() {
     const tmplSnap = await getDoc(templateRef);
     if (tmplSnap.exists()) {
       const data = tmplSnap.data();
-      DAYS_CONFIG = data.days; PERMANENT_EXTRAS = data.extras;
+      DAYS_CONFIG = data.days; PERMANENT_EXTRAS = data.extras || [];
+      // Engangs-migrering: legg til "15 min matte" i eksisterende maler
+      if ((data.version || 1) < TEMPLATE_VERSION) {
+        if (!PERMANENT_EXTRAS.includes(MATTE_EXTRA)) PERMANENT_EXTRAS.unshift(MATTE_EXTRA);
+        await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS, version: TEMPLATE_VERSION });
+      }
     } else {
       DAYS_CONFIG = JSON.parse(JSON.stringify(DEFAULT_DAYS_CONFIG));
       PERMANENT_EXTRAS = [...DEFAULT_EXTRAS];
-      await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS });
+      await setDoc(templateRef, { days: DAYS_CONFIG, extras: PERMANENT_EXTRAS, version: TEMPLATE_VERSION });
     }
 
     const stateSnap = await getDoc(stateRef);
